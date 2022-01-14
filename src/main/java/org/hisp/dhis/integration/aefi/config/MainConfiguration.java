@@ -25,17 +25,17 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.hisp.dhis.integration.aefi.config;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.bind.Marshaller;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-
-import javax.xml.bind.Marshaller;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class MainConfiguration
@@ -59,7 +59,8 @@ public class MainConfiguration
 
         Map<String, Object> properties = new HashMap<>();
         properties.put( Marshaller.JAXB_FORMATTED_OUTPUT, true );
-        properties.put( "com.sun.xml.bind.xmlHeaders", "\n<!DOCTYPE ichicsr SYSTEM \"http://eudravigilance.ema.europa.eu/dtd/icsr21xml.dtd\">" );
+        properties.put( "com.sun.xml.bind.xmlHeaders",
+            "\n<!DOCTYPE ichicsr SYSTEM \"http://eudravigilance.ema.europa.eu/dtd/icsr21xml.dtd\">" );
 
         marshaller.setMarshallerProperties( properties );
 

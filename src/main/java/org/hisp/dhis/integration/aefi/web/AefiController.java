@@ -25,7 +25,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.hisp.dhis.integration.aefi.web;
 
 import org.hisp.dhis.integration.aefi.common.IchicsrHelper;
@@ -42,7 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AefiController
 {
     @GetMapping( value = "/{uid}", produces = MediaType.APPLICATION_XML_VALUE )
-    public ResponseEntity<Ichicsr> getIchicsr( @PathVariable String uid )
+    public ResponseEntity<Ichicsr> getAefiCase( @PathVariable String uid )
     {
         Ichicsr ichicsr = IchicsrHelper.createIchicsr();
         ichicsr.setIchicsrmessageheader( IchicsrHelper.createIchicsrmessageheader() );
