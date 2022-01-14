@@ -25,16 +25,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+package org.hisp.dhis.integration.aefi.web;
 
-@SpringBootTest
-class ApplicationTests
+import org.hisp.dhis.integration.aefi.common.IchicsrHelper;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping( "/api/aefi-to-e2b" )
+public class AefiController
 {
-    @Test
-    void contextLoads()
+    @GetMapping( value = "/{uid}", produces = MediaType.APPLICATION_XML_VALUE )
+    public ResponseEntity<Ichicsr> getIchicsr( @PathVariable String uid )
     {
+        Ichicsr ichicsr = IchicsrHelper.createIchicsr();
+        ichicsr.setIchicsrmessageheader( IchicsrHelper.createIchicsrmessageheader() );
+        ichicsr.getSafetyreport().add( IchicsrHelper.createSafetyreport() );
+
+        return ResponseEntity.ok( ichicsr );
     }
 }
