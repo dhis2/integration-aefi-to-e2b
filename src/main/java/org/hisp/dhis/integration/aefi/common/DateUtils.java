@@ -32,6 +32,26 @@ import java.time.format.DateTimeFormatter;
 
 public final class DateUtils
 {
+    public static String nowDateFormat102()
+    {
+        return dateFormat204( LocalDateTime.now() );
+    }
+
+    public static String dateFormat102( LocalDateTime localDateTime )
+    {
+        return localDateTime.format( DateTimeFormatter.ofPattern( "yyyyMMdd" ) );
+    }
+
+    public static String nowDateFormat203()
+    {
+        return dateFormat204( LocalDateTime.now() );
+    }
+
+    public static String dateFormat203( LocalDateTime localDateTime )
+    {
+        return localDateTime.format( DateTimeFormatter.ofPattern( "yyyyMMddHHmm" ) );
+    }
+
     public static String nowDateFormat204()
     {
         return dateFormat204( LocalDateTime.now() );
