@@ -33,6 +33,7 @@ import java.util.Map;
 
 import lombok.Data;
 
+import org.hisp.dhis.integration.aefi.domain.icsr21.Additionaldocument;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagedate;
@@ -43,8 +44,35 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Messagenumb;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagereceiveridentifier;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagesenderidentifier;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagetype;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Occurcountry;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysource;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysourcecountry;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Qualification;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Receiptdate;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Receiptdateformat;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Receivedate;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Receivedateformat;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Receiver;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Receivercountrycode;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Receiverorganization;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Receivertype;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reportergivename;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reporterorganization;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reporttype;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Safetyreport;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Safetyreportid;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Safetyreportversion;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Sender;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Senderorganization;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Serious;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnesscongenitalanomali;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnessdeath;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnessdisabling;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnesshospitalization;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnesslifethreatening;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnessother;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Transmissiondate;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Transmissiondateformat;
 import org.hisp.dhis.integration.aefi.domain.tracker.DataValue;
 import org.hisp.dhis.integration.aefi.domain.tracker.Enrollment;
 import org.hisp.dhis.integration.aefi.domain.tracker.Event;
@@ -61,9 +89,7 @@ public final class IchicsrUtils
         return ichicsr;
     }
 
-    public static Ichicsrmessageheader createIchicsrmessageheader(
-        String messageNumber,
-        String senderId,
+    public static Ichicsrmessageheader createIchicsrmessageheader( String messageNumber, String senderId,
         String receiverId )
     {
         Messagetype messagetype = new Messagetype();
@@ -106,14 +132,139 @@ public final class IchicsrUtils
     public static Safetyreport createSafetyreport( TrackedEntityInstance trackedEntityInstance )
     {
         MappedTrackedEntityInstance map = createMappedTrackedEntityInstance( trackedEntityInstance );
-        System.err.println( map );
 
         Safetyreport safetyreport = new Safetyreport();
 
         Safetyreportversion safetyreportversion = new Safetyreportversion();
         safetyreportversion.setvalue( "1" );
+        safetyreport.setSafetyreportversion( safetyreportversion );
+
+        Safetyreportid safetyreportid = new Safetyreportid();
+        safetyreportid.setvalue( "XXX" );
+        safetyreport.setSafetyreportid( safetyreportid );
+
+        Primarysourcecountry primarysourcecountry = new Primarysourcecountry();
+        primarysourcecountry.setvalue( "XXX" );
+        safetyreport.setPrimarysourcecountry( primarysourcecountry );
+
+        Occurcountry occurcountry = new Occurcountry();
+        occurcountry.setvalue( "XXX" );
+        safetyreport.setOccurcountry( occurcountry );
+
+        Transmissiondateformat transmissiondateformat = new Transmissiondateformat();
+        transmissiondateformat.setvalue( "102" );
+        safetyreport.setTransmissiondateformat( transmissiondateformat );
+
+        Transmissiondate transmissiondate = new Transmissiondate();
+        transmissiondate.setvalue( "XXX" );
+        safetyreport.setTransmissiondate( transmissiondate );
+
+        Reporttype reporttype = new Reporttype();
+        reporttype.setvalue( "1" );
+        safetyreport.setReporttype( reporttype );
+
+        Serious serious = new Serious();
+        serious.setvalue( "XXX" );
+        safetyreport.setSerious( serious );
+
+        Seriousnessdeath seriousnessdeath = new Seriousnessdeath();
+        seriousnessdeath.setvalue( "XXX" );
+        safetyreport.setSeriousnessdeath( seriousnessdeath );
+
+        Seriousnesslifethreatening seriousnesslifethreatening = new Seriousnesslifethreatening();
+        seriousnesslifethreatening.setvalue( "XXX" );
+        safetyreport.setSeriousnesslifethreatening( seriousnesslifethreatening );
+
+        Seriousnesshospitalization seriousnesshospitalization = new Seriousnesshospitalization();
+        seriousnesshospitalization.setvalue( "XXX" );
+        safetyreport.setSeriousnesshospitalization( seriousnesshospitalization );
+
+        Seriousnessdisabling seriousnessdisabling = new Seriousnessdisabling();
+        seriousnessdisabling.setvalue( "XXX" );
+        safetyreport.setSeriousnessdisabling( seriousnessdisabling );
+
+        Seriousnesscongenitalanomali seriousnesscongenitalanomali = new Seriousnesscongenitalanomali();
+        seriousnesscongenitalanomali.setvalue( "XXX" );
+        safetyreport.setSeriousnesscongenitalanomali( seriousnesscongenitalanomali );
+
+        Seriousnessother seriousnessother = new Seriousnessother();
+        seriousnessother.setvalue( "XXX" );
+        safetyreport.setSeriousnessother( seriousnessother );
+
+        Receivedateformat receivedateformat = new Receivedateformat();
+        receivedateformat.setvalue( "102" );
+        safetyreport.setReceivedateformat( receivedateformat );
+
+        Receivedate receivedate = new Receivedate();
+        receivedate.setvalue( "XXX" );
+        safetyreport.setReceivedate( receivedate );
+
+        Receiptdateformat receiptdateformat = new Receiptdateformat();
+        receiptdateformat.setvalue( "102" );
+        safetyreport.setReceiptdateformat( receiptdateformat );
+
+        Receiptdate receiptdate = new Receiptdate();
+        receiptdate.setvalue( "XXX" );
+        safetyreport.setReceiptdate( receiptdate );
+
+        Additionaldocument additionaldocument = new Additionaldocument();
+        additionaldocument.setvalue( "2" );
+        safetyreport.setAdditionaldocument( additionaldocument );
+
+        safetyreport.getPrimarysource().add( createPrimarySource( map ) );
+        safetyreport.setSender( createSender( map ) );
+        safetyreport.setReceiver( createReceiver( map ) );
 
         return safetyreport;
+    }
+
+    private static Primarysource createPrimarySource( MappedTrackedEntityInstance map )
+    {
+        Primarysource primarysource = new Primarysource();
+
+        Reportergivename reportergivename = new Reportergivename();
+        reportergivename.setvalue( "XXX" );
+        primarysource.setReportergivename( reportergivename );
+
+        Reporterorganization reporterorganization = new Reporterorganization();
+        reporterorganization.setvalue( "XXX" );
+        primarysource.setReporterorganization( reporterorganization );
+
+        Qualification qualification = new Qualification();
+        qualification.setvalue( "XXX" );
+        primarysource.setQualification( qualification );
+
+        return primarysource;
+    }
+
+    private static Receiver createReceiver( MappedTrackedEntityInstance map )
+    {
+        Receiver receiver = new Receiver();
+
+        Receivertype receivertype = new Receivertype();
+        receivertype.setvalue( "4" );
+        receiver.setReceivertype( receivertype );
+
+        Receiverorganization receiverorganization = new Receiverorganization();
+        receiverorganization.setvalue( "XXX" );
+        receiver.setReceiverorganization( receiverorganization );
+
+        Receivercountrycode receivercountrycode = new Receivercountrycode();
+        receivercountrycode.setvalue( "XXX" );
+        receiver.setReceivercountrycode( receivercountrycode );
+
+        return receiver;
+    }
+
+    private static Sender createSender( MappedTrackedEntityInstance map )
+    {
+        Sender sender = new Sender();
+
+        Senderorganization senderorganization = new Senderorganization();
+        senderorganization.setvalue( "DHIS2" );
+        sender.setSenderorganization( senderorganization );
+
+        return sender;
     }
 
     private static MappedTrackedEntityInstance createMappedTrackedEntityInstance(
