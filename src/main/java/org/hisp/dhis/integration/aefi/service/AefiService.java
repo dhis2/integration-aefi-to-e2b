@@ -27,6 +27,8 @@
  */
 package org.hisp.dhis.integration.aefi.service;
 
+import java.util.UUID;
+
 import org.hisp.dhis.integration.aefi.common.IchicsrUtils;
 import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
@@ -34,8 +36,6 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstances;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class AefiService

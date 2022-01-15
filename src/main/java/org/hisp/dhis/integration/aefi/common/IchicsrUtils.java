@@ -27,7 +27,12 @@
  */
 package org.hisp.dhis.integration.aefi.common;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.Data;
+
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagedate;
@@ -45,10 +50,6 @@ import org.hisp.dhis.integration.aefi.domain.tracker.Enrollment;
 import org.hisp.dhis.integration.aefi.domain.tracker.Event;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityAttribute;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 public final class IchicsrUtils
 {
@@ -115,7 +116,8 @@ public final class IchicsrUtils
         return safetyreport;
     }
 
-    private static MappedTrackedEntityInstance createMappedTrackedEntityInstance( TrackedEntityInstance trackedEntityInstance )
+    private static MappedTrackedEntityInstance createMappedTrackedEntityInstance(
+        TrackedEntityInstance trackedEntityInstance )
     {
         MappedTrackedEntityInstance map = new MappedTrackedEntityInstance();
 
@@ -124,7 +126,8 @@ public final class IchicsrUtils
             map.getAttributes().put( attribute.getAttribute(), attribute.getValue() );
         }
 
-        // TODO this does not really properly handle multiple AEFI enrollments (but that's not a concern right now)
+        // TODO this does not really properly handle multiple AEFI enrollments
+        // (but that's not a concern right now)
         for ( Enrollment enrollment : trackedEntityInstance.getEnrollments() )
         {
             map.setEnrollmentDate( enrollment.getEnrollmentDate() );
