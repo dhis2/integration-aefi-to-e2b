@@ -36,6 +36,7 @@ import lombok.Data;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Additionaldocument;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Medicalhistoryepisode;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagedate;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagedateformat;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messageformatrelease;
@@ -45,6 +46,12 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Messagereceiveridentifier;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagesenderidentifier;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagetype;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Occurcountry;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patient;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientbirthdate;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientbirthdateformat;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientinitial;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientmedicalcomment;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientsex;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysource;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysourcecountry;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Qualification;
@@ -56,6 +63,7 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Receiver;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receivercountrycode;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receiverorganization;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receivertype;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reportercomment;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reportergivename;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reporterorganization;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reporttype;
@@ -71,6 +79,7 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnessdisabling;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnesshospitalization;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnesslifethreatening;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Seriousnessother;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Summary;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Transmissiondate;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Transmissiondateformat;
 import org.hisp.dhis.integration.aefi.domain.tracker.DataValue;
@@ -131,7 +140,7 @@ public final class IchicsrUtils
 
     public static Safetyreport createSafetyreport( TrackedEntityInstance trackedEntityInstance )
     {
-        MappedTrackedEntityInstance map = createMappedTrackedEntityInstance( trackedEntityInstance );
+        MappedTrackedEntityInstance te = createMappedTrackedEntityInstance( trackedEntityInstance );
 
         Safetyreport safetyreport = new Safetyreport();
 
@@ -211,14 +220,65 @@ public final class IchicsrUtils
         additionaldocument.setvalue( "2" );
         safetyreport.setAdditionaldocument( additionaldocument );
 
-        safetyreport.getPrimarysource().add( createPrimarySource( map ) );
-        safetyreport.setSender( createSender( map ) );
-        safetyreport.setReceiver( createReceiver( map ) );
+        safetyreport.getPrimarysource().add( createPrimarySource( te ) );
+        safetyreport.setSender( createSender( te ) );
+        safetyreport.setReceiver( createReceiver( te ) );
+        safetyreport.setPatient( createPatient( te ) );
 
         return safetyreport;
     }
 
-    private static Primarysource createPrimarySource( MappedTrackedEntityInstance map )
+    private static Patient createPatient( MappedTrackedEntityInstance te )
+    {
+        Patient patient = new Patient();
+
+        Patientinitial patientinitial = new Patientinitial();
+        patientinitial.setvalue( "XXX" );
+        patient.setPatientinitial( patientinitial );
+
+        Patientbirthdateformat patientbirthdateformat = new Patientbirthdateformat();
+        patientbirthdateformat.setvalue( "102" );
+        patient.setPatientbirthdateformat( patientbirthdateformat );
+
+        Patientbirthdate patientbirthdate = new Patientbirthdate();
+        patientbirthdate.setvalue( "XXX" );
+        patient.setPatientbirthdate( patientbirthdate );
+
+        Patientsex patientsex = new Patientsex();
+        patientsex.setvalue( "XXX" );
+        patient.setPatientsex( patientsex );
+
+        patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( te ) );
+
+        // reactions
+        // drugs
+
+        patient.setSummary( createSummary( te ) );
+
+        return patient;
+    }
+
+    private static Summary createSummary( MappedTrackedEntityInstance te )
+    {
+        Summary summary = new Summary();
+
+        Reportercomment reportercomment = new Reportercomment();
+        reportercomment.setvalue( "XXX" );
+
+        return summary;
+    }
+
+    private static Medicalhistoryepisode createMedicalHistoryEpisode( MappedTrackedEntityInstance te )
+    {
+        Medicalhistoryepisode medicalhistoryepisode = new Medicalhistoryepisode();
+
+        Patientmedicalcomment patientmedicalcomment = new Patientmedicalcomment();
+        patientmedicalcomment.setvalue( "XXX" );
+
+        return medicalhistoryepisode;
+    }
+
+    private static Primarysource createPrimarySource( MappedTrackedEntityInstance te )
     {
         Primarysource primarysource = new Primarysource();
 
@@ -237,7 +297,7 @@ public final class IchicsrUtils
         return primarysource;
     }
 
-    private static Receiver createReceiver( MappedTrackedEntityInstance map )
+    private static Receiver createReceiver( MappedTrackedEntityInstance te )
     {
         Receiver receiver = new Receiver();
 
@@ -256,7 +316,7 @@ public final class IchicsrUtils
         return receiver;
     }
 
-    private static Sender createSender( MappedTrackedEntityInstance map )
+    private static Sender createSender( MappedTrackedEntityInstance te )
     {
         Sender sender = new Sender();
 
@@ -270,36 +330,36 @@ public final class IchicsrUtils
     private static MappedTrackedEntityInstance createMappedTrackedEntityInstance(
         TrackedEntityInstance trackedEntityInstance )
     {
-        MappedTrackedEntityInstance map = new MappedTrackedEntityInstance();
+        MappedTrackedEntityInstance te = new MappedTrackedEntityInstance();
 
         for ( TrackedEntityAttribute attribute : trackedEntityInstance.getAttributes() )
         {
-            map.getAttributes().put( attribute.getAttribute(), attribute.getValue() );
+            te.getAttributes().put( attribute.getAttribute(), attribute.getValue() );
         }
 
         // TODO this does not really properly handle multiple AEFI enrollments
         // (but that's not a concern right now)
         for ( Enrollment enrollment : trackedEntityInstance.getEnrollments() )
         {
-            map.setEnrollmentDate( enrollment.getEnrollmentDate() );
-            map.setIncidentDate( enrollment.getIncidentDate() );
-            map.setOrgUnit( enrollment.getOrgUnit() );
+            te.setEnrollmentDate( enrollment.getEnrollmentDate() );
+            te.setIncidentDate( enrollment.getIncidentDate() );
+            te.setOrgUnit( enrollment.getOrgUnit() );
 
             for ( TrackedEntityAttribute attribute : enrollment.getAttributes() )
             {
-                map.getAttributes().put( attribute.getAttribute(), attribute.getValue() );
+                te.getAttributes().put( attribute.getAttribute(), attribute.getValue() );
             }
 
             for ( Event event : enrollment.getEvents() )
             {
                 for ( DataValue dataValue : event.getDataValues() )
                 {
-                    map.getDataValues().put( dataValue.getDataElement(), dataValue.getValue() );
+                    te.getDataValues().put( dataValue.getDataElement(), dataValue.getValue() );
                 }
             }
         }
 
-        return map;
+        return te;
     }
 
     private IchicsrUtils()
