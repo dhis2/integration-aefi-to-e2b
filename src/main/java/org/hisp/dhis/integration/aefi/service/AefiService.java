@@ -27,13 +27,15 @@
  */
 package org.hisp.dhis.integration.aefi.service;
 
-import java.util.UUID;
-
-import org.hisp.dhis.integration.aefi.common.IchicsrHelper;
+import org.hisp.dhis.integration.aefi.common.IchicsrUtils;
 import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstances;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class AefiService
@@ -47,14 +49,23 @@ public class AefiService
 
     public Ichicsr getFromTrackedEntity( TrackedEntityInstance trackedEntityInstance )
     {
-        Ichicsr ichicsr = IchicsrHelper.createIchicsr();
+        TrackedEntityInstances trackedEntityInstances = new TrackedEntityInstances();
+        trackedEntityInstances.getTrackedEntityInstances().add( trackedEntityInstance );
 
-        ichicsr.setIchicsrmessageheader( IchicsrHelper.createIchicsrmessageheader(
-            UUID.randomUUID().toString(),
-            aefiProperties.getE2b().getSenderId(),
-            aefiProperties.getE2b().getReceiverId() ) );
+        return getFromTrackedEntities( trackedEntityInstances );
+    }
 
-        ichicsr.getSafetyreport().add( IchicsrHelper.createSafetyreport() );
+    public Ichicsr getFromTrackedEntities( TrackedEntityInstances trackedEntityInstances )
+    {
+        Ichicsr ichicsr = IchicsrUtils.createIchicsr();
+
+        Ichicsrmessageheader ichicsrmessageheader = IchicsrUtils.createIchicsrmessageheader(
+            UUID.randomUUID().toString(), aefiProperties.getE2b().getSenderId(),
+            aefiProperties.getE2b().getReceiverId() );
+        ichicsr.setIchicsrmessageheader( ichicsrmessageheader );
+
+        trackedEntityInstances.getTrackedEntityInstances()
+            .forEach( te -> ichicsr.getSafetyreport().add( IchicsrUtils.createSafetyreport( te ) ) );
 
         return ichicsr;
     }

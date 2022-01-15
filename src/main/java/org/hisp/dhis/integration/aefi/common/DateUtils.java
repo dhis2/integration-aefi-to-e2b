@@ -25,15 +25,25 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi.domain.tracker;
 
-import lombok.Data;
+package org.hisp.dhis.integration.aefi.common;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-@Data
-public class TrackedEntityInstances
+public final class DateUtils
 {
-    private List<TrackedEntityInstance> trackedEntityInstances = new ArrayList<>();
+    public static String nowDateFormat204()
+    {
+        return dateFormat204( LocalDateTime.now() );
+    }
+
+    public static String dateFormat204( LocalDateTime localDateTime )
+    {
+        return localDateTime.format( DateTimeFormatter.ofPattern( "yyyyMMddHHmmss" ) );
+    }
+
+    private DateUtils()
+    {
+    }
 }
