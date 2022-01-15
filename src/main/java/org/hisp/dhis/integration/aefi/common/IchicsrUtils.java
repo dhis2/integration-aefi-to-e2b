@@ -27,7 +27,14 @@
  */
 package org.hisp.dhis.integration.aefi.common;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import lombok.Data;
+
 import org.hisp.dhis.integration.aefi.domain.icsr21.Additionaldocument;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Drug;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
@@ -84,12 +91,6 @@ import org.hisp.dhis.integration.aefi.domain.tracker.Enrollment;
 import org.hisp.dhis.integration.aefi.domain.tracker.Event;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityAttribute;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public final class IchicsrUtils
 {
