@@ -38,6 +38,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.client.RestTemplate;
@@ -86,6 +87,8 @@ public class MainConfiguration
         // TODO replace with WebClient (RestTemplate will be deprecated)
         return new RestTemplateBuilder()
             .defaultMessageConverters()
+            .defaultHeader( "Content-Type", MediaType.APPLICATION_JSON_VALUE )
+            .defaultHeader( "Accept", MediaType.APPLICATION_JSON_VALUE )
             .basicAuthentication( dhis2Properties.getUsername(), dhis2Properties.getPassword(), StandardCharsets.UTF_8 )
             .build();
     }

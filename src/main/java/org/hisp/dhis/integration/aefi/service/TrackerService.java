@@ -31,10 +31,6 @@ import java.net.URI;
 
 import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -56,10 +52,6 @@ public class TrackerService
 
     public TrackedEntityInstance getFromUid( String uid )
     {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set( "Content-Type", MediaType.APPLICATION_JSON_VALUE );
-        headers.set( "Accept", MediaType.APPLICATION_JSON_VALUE );
-
         UriComponents uriComponents = UriComponentsBuilder.newInstance()
             .uri( URI.create( dhis2Properties.getBaseUrl() ) )
             .path( "/api/trackedEntityInstances/" )
@@ -69,8 +61,8 @@ public class TrackerService
             .build()
             .encode();
 
-        ResponseEntity<TrackedEntityInstance> response = restTemplate.exchange( uriComponents.toUri(),
-            HttpMethod.GET, new HttpEntity<>( headers ), TrackedEntityInstance.class );
+        ResponseEntity<TrackedEntityInstance> response = restTemplate.getForEntity( uriComponents.toUri(),
+            TrackedEntityInstance.class );
 
         return response.getBody();
     }
