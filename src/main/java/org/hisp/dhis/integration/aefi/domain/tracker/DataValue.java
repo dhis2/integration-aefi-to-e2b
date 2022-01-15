@@ -30,7 +30,7 @@ package org.hisp.dhis.integration.aefi.domain.tracker;
 import lombok.Data;
 
 @Data
-class DataValue
+public class DataValue
 {
     private String dataElement;
 

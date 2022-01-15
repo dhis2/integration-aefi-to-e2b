@@ -25,16 +25,30 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi;
+package org.hisp.dhis.integration.aefi.config.properties;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import javax.validation.constraints.NotNull;
 
-@SpringBootTest
-class MainTests
+import lombok.Data;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+
+@Data
+@Component
+@Validated
+@ConfigurationProperties( prefix = "aefi-to-e2b.dhis2" )
+public class Dhis2Properties
 {
-    @Test
-    void contextLoads()
-    {
-    }
+    @NotNull
+    private String baseUrl;
+
+    @NotNull
+    private String username;
+
+    @NotNull
+    private String password;
+
+    private AefiMappingProperties mapping = new AefiMappingProperties();
 }

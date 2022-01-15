@@ -69,7 +69,10 @@ public final class IchicsrHelper
         return ichicsr;
     }
 
-    public static Ichicsrmessageheader createIchicsrmessageheader()
+    public static Ichicsrmessageheader createIchicsrmessageheader(
+        String messageNumber,
+        String senderId,
+        String receiverId )
     {
         Messagetype messagetype = new Messagetype();
         messagetype.setvalue( "ichicsr" );
@@ -81,13 +84,13 @@ public final class IchicsrHelper
         messageformatrelease.setvalue( "2.0" );
 
         Messagenumb messagenumb = new Messagenumb();
-        messagenumb.setvalue( "b584a22f-2f4e-417d-b0a0-76befe8b1e24" );
+        messagenumb.setvalue( messageNumber );
 
         Messagesenderidentifier messagesenderidentifier = new Messagesenderidentifier();
-        messagesenderidentifier.setvalue( "MU-DHIS2" );
+        messagesenderidentifier.setvalue( senderId );
 
         Messagereceiveridentifier messagereceiveridentifier = new Messagereceiveridentifier();
-        messagereceiveridentifier.setvalue( "National Pharmacovigilance Mauritius" );
+        messagereceiveridentifier.setvalue( receiverId );
 
         Messagedateformat messagedateformat = new Messagedateformat();
         messagedateformat.setvalue( "204" );

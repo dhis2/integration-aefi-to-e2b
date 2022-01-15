@@ -25,14 +25,37 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi.domain.tracker;
+package org.hisp.dhis.integration.aefi.service;
 
-import java.util.List;
+import java.util.UUID;
 
-import lombok.Data;
+import org.hisp.dhis.integration.aefi.common.IchicsrHelper;
+import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
+import org.springframework.stereotype.Service;
 
-@Data
-public class TrackedEntityInstances
+@Service
+public class AefiService
 {
-    private List<TrackedEntityInstance> trackedEntityInstances;
+    private final AefiProperties aefiProperties;
+
+    public AefiService( AefiProperties aefiProperties )
+    {
+        this.aefiProperties = aefiProperties;
+    }
+
+    public Ichicsr getFromTrackedEntity( TrackedEntityInstance trackedEntityInstance )
+    {
+        Ichicsr ichicsr = IchicsrHelper.createIchicsr();
+
+        ichicsr.setIchicsrmessageheader( IchicsrHelper.createIchicsrmessageheader(
+            UUID.randomUUID().toString(),
+            aefiProperties.getE2b().getSenderId(),
+            aefiProperties.getE2b().getReceiverId() ) );
+
+        ichicsr.getSafetyreport().add( IchicsrHelper.createSafetyreport() );
+
+        return ichicsr;
+    }
 }

@@ -25,14 +25,22 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi.domain.tracker;
+package org.hisp.dhis.integration.aefi.config.properties;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+
 @Data
-public class TrackedEntityInstances
+@Component
+@Validated
+@ConfigurationProperties( prefix = "aefi-to-e2b.dhis2.mapping" )
+public class AefiMappingProperties
 {
-    private List<TrackedEntityInstance> trackedEntityInstances;
+    @NotNull
+    private String program;
 }

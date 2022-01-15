@@ -27,19 +27,32 @@
  */
 package org.hisp.dhis.integration.aefi.config;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.Marshaller;
 
+import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
+@EnableConfigurationProperties
 public class MainConfiguration
 {
+    private final Dhis2Properties dhis2Properties;
+
+    public MainConfiguration( Dhis2Properties dhis2Properties )
+    {
+        this.dhis2Properties = dhis2Properties;
+    }
+
     @Bean
     public MarshallingHttpMessageConverter marshallingMessageConverter()
     {
@@ -65,5 +78,15 @@ public class MainConfiguration
         marshaller.setMarshallerProperties( properties );
 
         return marshaller;
+    }
+
+    @Bean
+    public RestTemplate restTemplate()
+    {
+        // TODO replace with WebClient (RestTemplate will be deprecated)
+        return new RestTemplateBuilder()
+            .defaultMessageConverters()
+            .basicAuthentication( dhis2Properties.getUsername(), dhis2Properties.getPassword(), StandardCharsets.UTF_8 )
+            .build();
     }
 }

@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Data
 @JsonInclude( JsonInclude.Include.NON_EMPTY )
-class TrackedEntityAttribute
+public class TrackedEntityAttribute
 {
     private String attribute;
 

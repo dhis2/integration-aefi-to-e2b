@@ -8,3 +8,5 @@ target/
 .settings
 .vscode
 /application.properties
+/application.yml
+

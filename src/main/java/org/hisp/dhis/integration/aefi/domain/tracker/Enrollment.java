@@ -33,7 +33,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-class Enrollment
+public class Enrollment
 {
     private String enrollment;
 

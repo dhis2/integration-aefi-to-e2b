@@ -25,39 +25,53 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi.web;
+package org.hisp.dhis.integration.aefi.service;
 
-import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
+import java.net.URI;
+
+import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
-import org.hisp.dhis.integration.aefi.service.AefiService;
-import org.hisp.dhis.integration.aefi.service.TrackerService;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
-@RestController
-@RequestMapping( "/api/aefi-to-e2b" )
-public class AefiController
+@Service
+public class TrackerService
 {
-    private final TrackerService trackerService;
+    private final Dhis2Properties dhis2Properties;
 
-    private final AefiService aefiService;
+    private final RestTemplate restTemplate;
 
-    public AefiController( TrackerService trackerService, AefiService aefiService )
+    public TrackerService( Dhis2Properties dhis2Properties, RestTemplate restTemplate )
     {
-        this.trackerService = trackerService;
-        this.aefiService = aefiService;
+        this.dhis2Properties = dhis2Properties;
+        this.restTemplate = restTemplate;
     }
 
-    @GetMapping( value = "/{uid}", produces = MediaType.APPLICATION_XML_VALUE )
-    public ResponseEntity<Ichicsr> getAefiCase( @PathVariable String uid )
+    public TrackedEntityInstance getFromUid( String uid )
     {
-        TrackedEntityInstance trackedEntityInstance = trackerService.getFromUid( uid );
-        Ichicsr ichicsr = aefiService.getFromTrackedEntity( trackedEntityInstance );
+        HttpHeaders headers = new HttpHeaders();
+        headers.set( "Content-Type", MediaType.APPLICATION_JSON_VALUE );
+        headers.set( "Accept", MediaType.APPLICATION_JSON_VALUE );
 
-        return ResponseEntity.ok( ichicsr );
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+            .uri( URI.create( dhis2Properties.getBaseUrl() ) )
+            .path( "/api/trackedEntityInstances/" )
+            .path( uid )
+            .queryParam( "program", dhis2Properties.getMapping().getProgram() )
+            .queryParam( "fields", "*" )
+            .build()
+            .encode();
+
+        ResponseEntity<TrackedEntityInstance> response = restTemplate.exchange( uriComponents.toUri(),
+            HttpMethod.GET, new HttpEntity<>( headers ), TrackedEntityInstance.class );
+
+        return response.getBody();
     }
 }

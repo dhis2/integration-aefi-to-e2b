@@ -32,7 +32,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-class Event
+public class Event
 {
     private String event;
 
