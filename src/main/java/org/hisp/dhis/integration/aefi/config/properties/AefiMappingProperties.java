@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2022, University of Oslo
+ * Copyright (c) 2004-2004-2022, University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,4 +43,148 @@ public class AefiMappingProperties
 {
     @NotNull
     private String program;
+
+    @NotNull
+    private String vaccine1_name;
+
+    @NotNull
+    private String vaccine1_brand;
+
+    @NotNull
+    private String vaccine1_date;
+
+    @NotNull
+    private String vaccine1_time;
+
+    @NotNull
+    private String vaccine1_batch;
+
+    @NotNull
+    private String vaccine1_dose;
+
+    @NotNull
+    private String vaccine1_expiry;
+
+    @NotNull
+    private String diluent1_name;
+
+    @NotNull
+    private String diluent1_batch;
+
+    @NotNull
+    private String diluent1_expiry;
+
+    @NotNull
+    private String diluent1_dor;
+
+    @NotNull
+    private String diluent1_tor;
+
+    @NotNull
+    private String vaccine2_name;
+
+    @NotNull
+    private String vaccine2_brand;
+
+    @NotNull
+    private String vaccine2_date;
+
+    @NotNull
+    private String vaccine2_time;
+
+    @NotNull
+    private String vaccine2_batch;
+
+    @NotNull
+    private String vaccine2_dose;
+
+    @NotNull
+    private String vaccine2_expiry;
+
+    @NotNull
+    private String diluent2_name;
+
+    @NotNull
+    private String diluent2_batch;
+
+    @NotNull
+    private String diluent2_expiry;
+
+    @NotNull
+    private String diluent2_dor;
+
+    @NotNull
+    private String diluent2_tor;
+
+    @NotNull
+    private String vaccine3_name;
+
+    @NotNull
+    private String vaccine3_brand;
+
+    @NotNull
+    private String vaccine3_date;
+
+    @NotNull
+    private String vaccine3_time;
+
+    @NotNull
+    private String vaccine3_batch;
+
+    @NotNull
+    private String vaccine3_dose;
+
+    @NotNull
+    private String vaccine3_expiry;
+
+    @NotNull
+    private String diluent3_name;
+
+    @NotNull
+    private String diluent3_batch;
+
+    @NotNull
+    private String diluent3_expiry;
+
+    @NotNull
+    private String diluent3_dor;
+
+    @NotNull
+    private String diluent3_tor;
+
+    @NotNull
+    private String vaccine4_name;
+
+    @NotNull
+    private String vaccine4_brand;
+
+    @NotNull
+    private String vaccine4_date;
+
+    @NotNull
+    private String vaccine4_time;
+
+    @NotNull
+    private String vaccine4_batch;
+
+    @NotNull
+    private String vaccine4_dose;
+
+    @NotNull
+    private String vaccine4_expiry;
+
+    @NotNull
+    private String diluent4_name;
+
+    @NotNull
+    private String diluent4_batch;
+
+    @NotNull
+    private String diluent4_expiry;
+
+    @NotNull
+    private String diluent4_dor;
+
+    @NotNull
+    private String diluent4_tor;
 }

@@ -65,7 +65,7 @@ public class AefiService
         ichicsr.setIchicsrmessageheader( ichicsrmessageheader );
 
         trackedEntityInstances.getTrackedEntityInstances()
-            .forEach( te -> ichicsr.getSafetyreport().add( IchicsrUtils.createSafetyreport( te ) ) );
+            .forEach( te -> ichicsr.getSafetyreport().add( IchicsrUtils.createSafetyreport( aefiProperties, te ) ) );
 
         return ichicsr;
     }

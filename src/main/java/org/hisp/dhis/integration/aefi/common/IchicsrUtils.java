@@ -35,11 +35,21 @@ import java.util.Map;
 
 import lombok.Data;
 
+import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Additionaldocument;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Drug;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drugadditional;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drugbatchnumb;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drugcharacterization;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drugdosagetext;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drugenddate;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drugenddateformat;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drugstartdate;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drugstartdateformat;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Medicalhistoryepisode;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Medicinalproduct;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagedate;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagedateformat;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messageformatrelease;
@@ -91,6 +101,7 @@ import org.hisp.dhis.integration.aefi.domain.tracker.Enrollment;
 import org.hisp.dhis.integration.aefi.domain.tracker.Event;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityAttribute;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
+import org.springframework.util.StringUtils;
 
 public final class IchicsrUtils
 {
@@ -142,7 +153,8 @@ public final class IchicsrUtils
         return ichicsrmessageheader;
     }
 
-    public static Safetyreport createSafetyreport( TrackedEntityInstance trackedEntityInstance )
+    public static Safetyreport createSafetyreport( AefiProperties aefiProperties,
+        TrackedEntityInstance trackedEntityInstance )
     {
         MappedTrackedEntityInstance te = createMappedTrackedEntityInstance( trackedEntityInstance );
 
@@ -227,12 +239,12 @@ public final class IchicsrUtils
         safetyreport.getPrimarysource().add( createPrimarySource( te ) );
         safetyreport.setSender( createSender( te ) );
         safetyreport.setReceiver( createReceiver( te ) );
-        safetyreport.setPatient( createPatient( te ) );
+        safetyreport.setPatient( createPatient( aefiProperties, te ) );
 
         return safetyreport;
     }
 
-    private static Patient createPatient( MappedTrackedEntityInstance te )
+    private static Patient createPatient( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         Patient patient = new Patient();
 
@@ -254,20 +266,177 @@ public final class IchicsrUtils
 
         patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( te ) );
 
-        patient.getReaction().addAll( createReactions( te ) );
-        patient.getDrug().addAll( createDrugs( te ) );
+        patient.getDrug().addAll( createDrugs( aefiProperties, te ) );
+        patient.getReaction().addAll( createReactions( aefiProperties, te ) );
 
         patient.setSummary( createSummary( te ) );
 
         return patient;
     }
 
-    private static List<Reaction> createReactions( MappedTrackedEntityInstance te )
+    private static List<Drug> createDrugs( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
-        return new ArrayList<>();
+        List<Drug> drugs = new ArrayList<>();
+
+        createDrug( drugs, te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_name() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_brand() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_date() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_time() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_batch() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_dose() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_expiry() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_name() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_batch() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_expiry() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_dor() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_tor() ) );
+
+        createDrug( drugs, te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_name() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_brand() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_date() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_time() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_batch() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_dose() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_expiry() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_name() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_batch() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_expiry() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_dor() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_tor() ) );
+
+        createDrug( drugs, te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_name() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_brand() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_date() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_time() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_batch() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_dose() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_expiry() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_name() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_batch() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_expiry() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_dor() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_tor() ) );
+
+        createDrug( drugs, te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_name() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_brand() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_date() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_time() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_batch() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_dose() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_expiry() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_name() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_batch() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_expiry() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_dor() ),
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_tor() ) );
+
+        return drugs;
     }
 
-    private static List<Drug> createDrugs( MappedTrackedEntityInstance te )
+    private static void createDrug( List<Drug> drugs, String vaccine_name, String vaccine_brand, String vaccine_date,
+        String vaccine_time, String vaccine_batch, String vaccine_dose, String vaccine_expiry, String diluent_name,
+        String diluent_batch,
+        String diluent_expiry, String diluent_dor, String diluent_tor )
+    {
+        if ( !StringUtils.hasText( vaccine_name ) )
+        {
+            return;
+        }
+
+        Drug drug = new Drug();
+        Drugcharacterization drugcharacterization = new Drugcharacterization();
+        drugcharacterization.setvalue( "1" );
+        drug.setDrugcharacterization( drugcharacterization );
+
+        Medicinalproduct medicinalproduct = new Medicinalproduct();
+        medicinalproduct.setvalue( vaccine_name + " " + vaccine_brand );
+        drug.setMedicinalproduct( medicinalproduct );
+
+        Drugbatchnumb drugbatchnumb = new Drugbatchnumb();
+        drugbatchnumb.setvalue( vaccine_batch );
+        drug.setDrugbatchnumb( drugbatchnumb );
+
+        List<String> druginfo = new ArrayList<>();
+
+        if ( StringUtils.hasText( vaccine_dose ) )
+        {
+            druginfo.add( vaccine_dose );
+        }
+
+        if ( StringUtils.hasText( vaccine_expiry ) )
+        {
+            druginfo.add( ", Expiry: " + vaccine_expiry );
+        }
+
+        if ( !druginfo.isEmpty() )
+        {
+            Drugdosagetext drugdosagetext = new Drugdosagetext();
+            drugdosagetext.setvalue( String.join( ",", druginfo ) );
+            drug.setDrugdosagetext( drugdosagetext );
+        }
+
+        if ( StringUtils.hasText( vaccine_date ) )
+        {
+            // TODO do we care about time? we are currently using 102 format
+            if ( !StringUtils.hasText( vaccine_time ) )
+            {
+                vaccine_time = "00:00:00";
+            }
+
+            LocalDateTime dateTime = LocalDateTime.parse( vaccine_date + "T" + vaccine_time );
+
+            Drugstartdateformat drugstartdateformat = new Drugstartdateformat();
+            drugstartdateformat.setvalue( "102" );
+            drug.setDrugstartdateformat( drugstartdateformat );
+
+            Drugstartdate drugstartdate = new Drugstartdate();
+            drugstartdate.setvalue( DateUtils.dateFormat102( dateTime ) );
+            drug.setDrugstartdate( drugstartdate );
+
+            Drugenddateformat drugenddateformat = new Drugenddateformat();
+            drugenddateformat.setvalue( "102" );
+            drug.setDrugenddateformat( drugenddateformat );
+
+            Drugenddate drugenddate = new Drugenddate();
+            drugenddate.setvalue( DateUtils.dateFormat102( dateTime ) );
+            drug.setDrugenddate( drugenddate );
+        }
+
+        if ( StringUtils.hasText( diluent_name ) )
+        {
+            List<String> diluentinfo = new ArrayList<>();
+
+            diluentinfo.add( "N: " + diluent_name );
+
+            if ( StringUtils.hasText( diluent_batch ) )
+            {
+                diluentinfo.add( "B: " + diluent_batch );
+            }
+
+            if ( StringUtils.hasText( diluent_expiry ) )
+            {
+                diluentinfo.add( "EX: " + diluent_expiry );
+            }
+
+            if ( StringUtils.hasText( diluent_dor ) )
+            {
+                diluentinfo.add( "DR: " + diluent_dor );
+            }
+
+            if ( StringUtils.hasText( diluent_tor ) )
+            {
+                diluentinfo.add( "TR: " + diluent_tor );
+            }
+
+            Drugadditional drugadditional = new Drugadditional();
+            drugadditional.setvalue( String.join( ",", diluentinfo ) );
+            drug.setDrugadditional( drugadditional );
+        }
+
+        drugs.add( drug );
+    }
+
+    private static List<Reaction> createReactions( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         return new ArrayList<>();
     }
