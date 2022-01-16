@@ -35,6 +35,7 @@ import java.util.Map;
 
 import lombok.Data;
 
+import org.hisp.dhis.integration.aefi.config.properties.AefiMappingProperties;
 import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Additionaldocument;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Drug;
@@ -67,8 +68,10 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Patientmedicalcomment;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Patientsex;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysource;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysourcecountry;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysourcereaction;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Qualification;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reaction;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionoutcome;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receiptdate;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receiptdateformat;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receivedate;
@@ -438,7 +441,56 @@ public final class IchicsrUtils
 
     private static List<Reaction> createReactions( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
-        return new ArrayList<>();
+        List<Reaction> reactions = new ArrayList<>();
+
+        Map<String, String> dataValues = te.getDataValues();
+        AefiMappingProperties mapping = aefiProperties.getDhis2().getMapping();
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_severe_local_reaction() ) ) )
+        {
+            List<String> reactionList = new ArrayList<>();
+            reactionList.add( "Severe local reaction" );
+
+            if ( StringUtils.hasText( dataValues.get( mapping.getReaction_above_3_days() ) ) )
+            {
+                reactionList.add( ">3 days" );
+            }
+
+            if ( StringUtils.hasText( dataValues.get( mapping.getReaction_beyond_nearest_joint() ) ) )
+            {
+                reactionList.add( "Beyond nearest joint" );
+            }
+
+            Primarysourcereaction primarysourcereaction = new Primarysourcereaction();
+            primarysourcereaction.setvalue( String.join( ",", reactionList ) );
+
+            Reaction reaction = new Reaction();
+            reaction.setPrimarysourcereaction( primarysourcereaction );
+
+            reactions.add( reaction );
+
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_seizures() ) ) )
+        {
+            if ( StringUtils.hasText( dataValues.get( mapping.getReaction_seizures_type() ) ) )
+            {
+                // dataValues.get( mapping.getReaction_seizures_type() ) )
+            }
+        }
+
+        return reactions;
+    }
+
+    private static Reaction createReaction( List<String> reactionList )
+    {
+        Reaction reaction = new Reaction();
+
+        Reactionoutcome reactionoutcome = new Reactionoutcome();
+        reactionoutcome.setvalue( String.join( ",", reactionList ) );
+        reaction.setReactionoutcome( reactionoutcome );
+
+        return reaction;
     }
 
     private static Summary createSummary( MappedTrackedEntityInstance te )

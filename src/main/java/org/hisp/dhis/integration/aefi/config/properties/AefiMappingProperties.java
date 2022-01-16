@@ -189,6 +189,12 @@ public class AefiMappingProperties
     private String diluent4_tor;
 
     @NotNull
+    private String reaction_start_date;
+
+    @NotNull
+    private String reaction_start_time;
+
+    @NotNull
     private String reaction_severe_local_reaction;
 
     @NotNull
