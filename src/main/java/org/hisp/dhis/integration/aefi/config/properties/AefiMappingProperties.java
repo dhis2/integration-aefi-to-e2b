@@ -187,4 +187,121 @@ public class AefiMappingProperties
 
     @NotNull
     private String diluent4_tor;
+
+    @NotNull
+    private String reaction_severe_local_reaction;
+
+    @NotNull
+    private String reaction_above_3_days;
+
+    @NotNull
+    private String reaction_beyond_nearest_joint;
+
+    @NotNull
+    private String reaction_seizures;
+
+    @NotNull
+    private String reaction_seizures_type;
+
+    @NotNull
+    private String reaction_abscess;
+
+    @NotNull
+    private String reaction_sepsis;
+
+    @NotNull
+    private String reaction_encephalopathy;
+
+    @NotNull
+    private String reaction_toxic_shock_syndrome;
+
+    @NotNull
+    private String reaction_thrombocytopenia;
+
+    @NotNull
+    private String reaction_anaphylaxis;
+
+    @NotNull
+    private String reaction_fever_above_38;
+
+    @NotNull
+    private String reaction_headache;
+
+    @NotNull
+    private String reaction_irritability;
+
+    @NotNull
+    private String reaction_sore_throat;
+
+    @NotNull
+    private String reaction_joint_pain;
+
+    @NotNull
+    private String reaction_abdominal_pain;
+
+    @NotNull
+    private String reaction_cough;
+
+    @NotNull
+    private String reaction_nausea;
+
+    @NotNull
+    private String reaction_diarrhoea;
+
+    @NotNull
+    private String reaction_fatigue;
+
+    @NotNull
+    private String reaction_vomiting;
+
+    @NotNull
+    private String reaction_injection_site_soreness;
+
+    @NotNull
+    private String reaction_injection_site_tenderness;
+
+    @NotNull
+    private String reaction_skin_rash;
+
+    @NotNull
+    private String reaction_itchingh;
+
+    @NotNull
+    private String reaction_muscle_pain;
+
+    @NotNull
+    private String reaction_persistent_crying;
+
+    @NotNull
+    private String reaction_poor_breast_feeding;
+
+    @NotNull
+    private String reaction_loss_of_apetite;
+
+    @NotNull
+    private String reaction_chills;
+
+    @NotNull
+    private String reaction_fainting;
+
+    @NotNull
+    private String reaction_mild_fever;
+
+    @NotNull
+    private String reaction_tiredness;
+
+    @NotNull
+    private String reaction_nasal_congestion;
+
+    @NotNull
+    private String reaction_lymph_node_enlargement;
+
+    @NotNull
+    private String reaction_dizziness;
+
+    @NotNull
+    private String reaction_drowsiness;
+
+    @NotNull
+    private String reaction_other;
 }
