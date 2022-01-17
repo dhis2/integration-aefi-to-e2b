@@ -5,6 +5,7 @@ aefi-to-e2b:
   dhis2:
     mapping:
       program: EZkN8vYZwjR
+      gender: CklPZdOd6H1
       vaccine1_name: uSVcZzSM3zg
       vaccine1_brand: JSd0HQOgJ8w
       vaccine1_date: dOkuCjpD978
@@ -55,6 +56,7 @@ aefi-to-e2b:
       diluent4_tor: EDdd0HsfLcO
       reaction_start_date: vNGUuAZA2C2
       reaction_start_time: NyCB1VAOfJd
+      reaction_outcome: yRrSDiR5v1M
       reaction_severe_local_reaction: UNmEidE6M9K
       reaction_above_3_days: We87rvcvd8J
       reaction_beyond_nearest_joint: f8hjxmHOtAB

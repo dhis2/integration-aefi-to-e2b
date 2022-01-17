@@ -72,6 +72,8 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysourcereaction;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Qualification;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reaction;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionoutcome;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionstartdate;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionstartdateformat;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receiptdate;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receiptdateformat;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Receivedate;
@@ -461,36 +463,284 @@ public final class IchicsrUtils
                 reactionList.add( "Beyond nearest joint" );
             }
 
-            Primarysourcereaction primarysourcereaction = new Primarysourcereaction();
-            primarysourcereaction.setvalue( String.join( ",", reactionList ) );
-
-            Reaction reaction = new Reaction();
-            reaction.setPrimarysourcereaction( primarysourcereaction );
-
-            reactions.add( reaction );
-
+            reactions.add( createReaction( aefiProperties, te, reactionList ) );
         }
 
         if ( StringUtils.hasText( dataValues.get( mapping.getReaction_seizures() ) ) )
         {
-            if ( StringUtils.hasText( dataValues.get( mapping.getReaction_seizures_type() ) ) )
+            String seizureType = dataValues.get( mapping.getReaction_seizures_type() );
+
+            if ( StringUtils.hasText( seizureType ) )
             {
-                // dataValues.get( mapping.getReaction_seizures_type() ) )
+                reactions.add( createReaction( aefiProperties, te, "Seizures (" + seizureType + ")" ) );
             }
+            else
+            {
+                reactions.add( createReaction( aefiProperties, te, "Seizures" ) );
+            }
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_abscess() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Abscess" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_sepsis() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Sepsis" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_encephalopathy() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Encephalopathy" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_toxic_shock_syndrome() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Toxic shock syndrome" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_thrombocytopenia() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Thrombocytopenia" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_anaphylaxis() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Anaphylaxis" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_fever_above_38() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Fever (> 38°C)" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_headache() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Headache" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_irritability() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Irritability" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_sore_throat() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Sore Throat" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_joint_pain() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Joint Pain" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_abdominal_pain() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Abdominal Pain" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_cough() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Cough" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_nausea() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Nausea" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_diarrhoea() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Diarrhoea" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_fatigue() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Fatigue" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_vomiting() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Vomiting" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_injection_site_soreness() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Injection site soreness" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_injection_site_tenderness() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Injection site tenderness" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_skin_rash() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Skin rash" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_itchingh() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Itching" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_muscle_pain() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Muscle pain" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_persistent_crying() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Persistent crying" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_poor_breast_feeding() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Poor breast feeding" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_loss_of_apetite() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Loss of apetite" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_chills() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Chills" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_fainting() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Fainting" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_mild_fever() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Mild fever" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_tiredness() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Tiredness" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_nasal_congestion() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Nasal congestion" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_lymph_node_enlargement() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Lymph node enlargement" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_dizziness() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Dizziness" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_drowsiness() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, "Drowsiness" ) );
+        }
+
+        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_other() ) ) )
+        {
+            reactions.add( createReaction( aefiProperties, te, dataValues.get( mapping.getReaction_other() ) ) );
         }
 
         return reactions;
     }
 
-    private static Reaction createReaction( List<String> reactionList )
+    private static Reaction createReaction( AefiProperties aefiProperties, MappedTrackedEntityInstance te,
+        String reaction )
+    {
+        return createReaction( aefiProperties, te, List.of( reaction ) );
+    }
+
+    private static Reaction createReaction( AefiProperties aefiProperties, MappedTrackedEntityInstance te,
+        List<String> reactionList )
     {
         Reaction reaction = new Reaction();
 
-        Reactionoutcome reactionoutcome = new Reactionoutcome();
-        reactionoutcome.setvalue( String.join( ",", reactionList ) );
-        reaction.setReactionoutcome( reactionoutcome );
+        Primarysourcereaction primarysourcereaction = new Primarysourcereaction();
+        primarysourcereaction.setvalue( String.join( ",", reactionList ) );
+        reaction.setPrimarysourcereaction( primarysourcereaction );
+
+        Reactionstartdateformat reactionstartdateformat = new Reactionstartdateformat();
+        reactionstartdateformat.setvalue( "203" );
+        reaction.setReactionstartdateformat( reactionstartdateformat );
+
+        Reactionstartdate reactionstartdate = new Reactionstartdate();
+
+        String reactionStartDate = te.getDataValues()
+            .get( aefiProperties.getDhis2().getMapping().getReaction_start_date() );
+        String reactionStartTime = te.getDataValues()
+            .get( aefiProperties.getDhis2().getMapping().getReaction_start_time() );
+
+        if ( StringUtils.hasText( reactionStartDate ) )
+        {
+            if ( !StringUtils.hasText( reactionStartTime ) )
+            {
+                reactionStartTime = "00:00:00";
+            }
+
+            LocalDateTime dateTime = LocalDateTime.parse( reactionStartDate + "T" + reactionStartTime );
+            reactionstartdate.setvalue( DateUtils.dateFormat203( dateTime ) );
+        }
+
+        reaction.setReactionstartdate( reactionstartdate );
+
+        String outcome = getReactionOutcome( aefiProperties, te );
+
+        if ( StringUtils.hasText( outcome ) )
+        {
+            Reactionoutcome reactionoutcome = new Reactionoutcome();
+            reactionoutcome.setvalue( outcome );
+            reaction.setReactionoutcome( reactionoutcome );
+        }
 
         return reaction;
+    }
+
+    private static String getReactionOutcome( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
+    {
+        String value = te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReaction_outcome() );
+
+        switch ( value )
+        {
+        case "Recovered/resolved":
+            return "1";
+        case "Recovering/resolving":
+            return "2";
+        case "Not recovered/not resolved":
+            return "3";
+        case "Recovered/resolved with sequelae":
+            return "4";
+        case "Died":
+        case "DiedAutopsy done":
+            return "5";
+        case "Unknown":
+            return "6";
+        }
+
+        return value;
+    }
+
+    private static String getPatientSex( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
+    {
+        String gender = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getGender() );
+
+        switch ( gender )
+        {
+        case "MALE":
+            return "1";
+        case "FEMALE":
+            return "2";
+        }
+
+        return "";
     }
 
     private static Summary createSummary( MappedTrackedEntityInstance te )

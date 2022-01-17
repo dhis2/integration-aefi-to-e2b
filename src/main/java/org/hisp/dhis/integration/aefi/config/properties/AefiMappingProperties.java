@@ -45,6 +45,9 @@ public class AefiMappingProperties
     private String program;
 
     @NotNull
+    private String gender;
+
+    @NotNull
     private String vaccine1_name;
 
     @NotNull
@@ -193,6 +196,9 @@ public class AefiMappingProperties
 
     @NotNull
     private String reaction_start_time;
+
+    @NotNull
+    private String reaction_outcome;
 
     @NotNull
     private String reaction_severe_local_reaction;
