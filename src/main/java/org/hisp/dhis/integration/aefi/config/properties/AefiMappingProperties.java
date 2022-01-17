@@ -45,7 +45,46 @@ public class AefiMappingProperties
     private String program;
 
     @NotNull
-    private String gender;
+    private String patient_id;
+
+    @NotNull
+    private String patient_gender;
+
+    @NotNull
+    private String patient_given_name;
+
+    @NotNull
+    private String patient_family_name;
+
+    @NotNull
+    private String patient_birthdate;
+
+    @NotNull
+    private String serious;
+
+    @NotNull
+    private String seriousness_death;
+
+    @NotNull
+    private String seriousness_life_threatening;
+
+    @NotNull
+    private String seriousness_hospitalization;
+
+    @NotNull
+    private String seriousness_disabling;
+
+    @NotNull
+    private String seriousness_congenital_anomali;
+
+    @NotNull
+    private String seriousness_other;
+
+    @NotNull
+    private String reporter_name;
+
+    @NotNull
+    private String reporter_organization;
 
     @NotNull
     private String vaccine1_name;

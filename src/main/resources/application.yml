@@ -5,7 +5,20 @@ aefi-to-e2b:
   dhis2:
     mapping:
       program: EZkN8vYZwjR
-      gender: CklPZdOd6H1
+      patient_id: h5FuguPFF2j
+      patient_gender: CklPZdOd6H1
+      patient_given_name: TfdH5KvFmMy
+      patient_family_name: aW66s2QSosT
+      patient_birthdate: BiTsLcJQ95V
+      serious: fq1c1A3EOX5
+      seriousness_death: DOA6ZFMro84
+      seriousness_life_threatening: lATDYNmTLKD
+      seriousness_hospitalization: Il1lTfknLdd
+      seriousness_disabling: lsO8n8ZmLAB
+      seriousness_congenital_anomali: lSBsxcQU0kO
+      seriousness_other: tWcNgbkOETR
+      reporter_name: uZ9c4fKXuNS
+      reporter_organization: Q20pEixZxCs
       vaccine1_name: uSVcZzSM3zg
       vaccine1_brand: JSd0HQOgJ8w
       vaccine1_date: dOkuCjpD978

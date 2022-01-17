@@ -27,6 +27,8 @@
  */
 package org.hisp.dhis.integration.aefi.common;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,7 +108,6 @@ import org.hisp.dhis.integration.aefi.domain.tracker.Enrollment;
 import org.hisp.dhis.integration.aefi.domain.tracker.Event;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityAttribute;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
-import org.springframework.util.StringUtils;
 
 public final class IchicsrUtils
 {
@@ -170,15 +171,23 @@ public final class IchicsrUtils
         safetyreport.setSafetyreportversion( safetyreportversion );
 
         Safetyreportid safetyreportid = new Safetyreportid();
-        safetyreportid.setvalue( "XXX" );
+        safetyreportid.setvalue( aefiProperties.getE2b().getCountry() );
+
+        String patientId = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_id() );
+
+        if ( hasText( patientId ) )
+        {
+            safetyreportid.setvalue( aefiProperties.getE2b().getCountry() + "-" + patientId );
+        }
+
         safetyreport.setSafetyreportid( safetyreportid );
 
         Primarysourcecountry primarysourcecountry = new Primarysourcecountry();
-        primarysourcecountry.setvalue( "XXX" );
+        primarysourcecountry.setvalue( aefiProperties.getE2b().getCountry() );
         safetyreport.setPrimarysourcecountry( primarysourcecountry );
 
         Occurcountry occurcountry = new Occurcountry();
-        occurcountry.setvalue( "XXX" );
+        occurcountry.setvalue( aefiProperties.getE2b().getCountry() );
         safetyreport.setOccurcountry( occurcountry );
 
         Transmissiondateformat transmissiondateformat = new Transmissiondateformat();
@@ -186,7 +195,7 @@ public final class IchicsrUtils
         safetyreport.setTransmissiondateformat( transmissiondateformat );
 
         Transmissiondate transmissiondate = new Transmissiondate();
-        transmissiondate.setvalue( "XXX" );
+        transmissiondate.setvalue( DateUtils.nowDateFormat102() );
         safetyreport.setTransmissiondate( transmissiondate );
 
         Reporttype reporttype = new Reporttype();
@@ -194,31 +203,37 @@ public final class IchicsrUtils
         safetyreport.setReporttype( reporttype );
 
         Serious serious = new Serious();
-        serious.setvalue( "XXX" );
+        serious.setvalue( getYesNo( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSerious() ) ) );
         safetyreport.setSerious( serious );
 
         Seriousnessdeath seriousnessdeath = new Seriousnessdeath();
-        seriousnessdeath.setvalue( "XXX" );
+        seriousnessdeath.setvalue(
+            getYesNo( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_death() ) ) );
         safetyreport.setSeriousnessdeath( seriousnessdeath );
 
         Seriousnesslifethreatening seriousnesslifethreatening = new Seriousnesslifethreatening();
-        seriousnesslifethreatening.setvalue( "XXX" );
+        seriousnesslifethreatening.setvalue( getYesNo(
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_life_threatening() ) ) );
         safetyreport.setSeriousnesslifethreatening( seriousnesslifethreatening );
 
         Seriousnesshospitalization seriousnesshospitalization = new Seriousnesshospitalization();
-        seriousnesshospitalization.setvalue( "XXX" );
+        seriousnesshospitalization.setvalue( getYesNo(
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_hospitalization() ) ) );
         safetyreport.setSeriousnesshospitalization( seriousnesshospitalization );
 
         Seriousnessdisabling seriousnessdisabling = new Seriousnessdisabling();
-        seriousnessdisabling.setvalue( "XXX" );
+        seriousnessdisabling.setvalue(
+            getYesNo( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_disabling() ) ) );
         safetyreport.setSeriousnessdisabling( seriousnessdisabling );
 
         Seriousnesscongenitalanomali seriousnesscongenitalanomali = new Seriousnesscongenitalanomali();
-        seriousnesscongenitalanomali.setvalue( "XXX" );
+        seriousnesscongenitalanomali.setvalue( getYesNo(
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_congenital_anomali() ) ) );
         safetyreport.setSeriousnesscongenitalanomali( seriousnesscongenitalanomali );
 
         Seriousnessother seriousnessother = new Seriousnessother();
-        seriousnessother.setvalue( "XXX" );
+        seriousnessother.setvalue(
+            getYesNo( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_other() ) ) );
         safetyreport.setSeriousnessother( seriousnessother );
 
         Receivedateformat receivedateformat = new Receivedateformat();
@@ -226,7 +241,7 @@ public final class IchicsrUtils
         safetyreport.setReceivedateformat( receivedateformat );
 
         Receivedate receivedate = new Receivedate();
-        receivedate.setvalue( "XXX" );
+        receivedate.setvalue( DateUtils.nowDateFormat102() );
         safetyreport.setReceivedate( receivedate );
 
         Receiptdateformat receiptdateformat = new Receiptdateformat();
@@ -234,16 +249,16 @@ public final class IchicsrUtils
         safetyreport.setReceiptdateformat( receiptdateformat );
 
         Receiptdate receiptdate = new Receiptdate();
-        receiptdate.setvalue( "XXX" );
+        receiptdate.setvalue( DateUtils.nowDateFormat102() );
         safetyreport.setReceiptdate( receiptdate );
 
         Additionaldocument additionaldocument = new Additionaldocument();
         additionaldocument.setvalue( "2" );
         safetyreport.setAdditionaldocument( additionaldocument );
 
-        safetyreport.getPrimarysource().add( createPrimarySource( te ) );
-        safetyreport.setSender( createSender( te ) );
-        safetyreport.setReceiver( createReceiver( te ) );
+        safetyreport.getPrimarysource().add( createPrimarySource( aefiProperties, te ) );
+        safetyreport.setSender( createSender( aefiProperties, te ) );
+        safetyreport.setReceiver( createReceiver( aefiProperties, te ) );
         safetyreport.setPatient( createPatient( aefiProperties, te ) );
 
         return safetyreport;
@@ -254,27 +269,32 @@ public final class IchicsrUtils
         Patient patient = new Patient();
 
         Patientinitial patientinitial = new Patientinitial();
-        patientinitial.setvalue( "XXX" );
+        patientinitial.setvalue( getPatientName( aefiProperties, te ) );
         patient.setPatientinitial( patientinitial );
 
         Patientbirthdateformat patientbirthdateformat = new Patientbirthdateformat();
         patientbirthdateformat.setvalue( "102" );
         patient.setPatientbirthdateformat( patientbirthdateformat );
 
-        Patientbirthdate patientbirthdate = new Patientbirthdate();
-        patientbirthdate.setvalue( "XXX" );
-        patient.setPatientbirthdate( patientbirthdate );
+        String patientBirthdate = getPatientBirthdate( aefiProperties, te );
+
+        if ( hasText( patientBirthdate ) )
+        {
+            Patientbirthdate patientbirthdate = new Patientbirthdate();
+            patientbirthdate.setvalue( patientBirthdate );
+            patient.setPatientbirthdate( patientbirthdate );
+        }
 
         Patientsex patientsex = new Patientsex();
-        patientsex.setvalue( "XXX" );
+        patientsex.setvalue( getPatientGender( aefiProperties, te ) );
         patient.setPatientsex( patientsex );
 
-        patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( te ) );
+        patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( aefiProperties, te ) );
 
         patient.getDrug().addAll( createDrugs( aefiProperties, te ) );
         patient.getReaction().addAll( createReactions( aefiProperties, te ) );
 
-        patient.setSummary( createSummary( te ) );
+        patient.setSummary( createSummary( aefiProperties, te ) );
 
         return patient;
     }
@@ -343,7 +363,7 @@ public final class IchicsrUtils
         String diluent_batch,
         String diluent_expiry, String diluent_dor, String diluent_tor )
     {
-        if ( !StringUtils.hasText( vaccine_name ) )
+        if ( !hasText( vaccine_name ) )
         {
             return;
         }
@@ -363,12 +383,12 @@ public final class IchicsrUtils
 
         List<String> druginfo = new ArrayList<>();
 
-        if ( StringUtils.hasText( vaccine_dose ) )
+        if ( hasText( vaccine_dose ) )
         {
             druginfo.add( vaccine_dose );
         }
 
-        if ( StringUtils.hasText( vaccine_expiry ) )
+        if ( hasText( vaccine_expiry ) )
         {
             druginfo.add( ", Expiry: " + vaccine_expiry );
         }
@@ -380,10 +400,10 @@ public final class IchicsrUtils
             drug.setDrugdosagetext( drugdosagetext );
         }
 
-        if ( StringUtils.hasText( vaccine_date ) )
+        if ( hasText( vaccine_date ) )
         {
             // TODO do we care about time? we are currently using 102 format
-            if ( !StringUtils.hasText( vaccine_time ) )
+            if ( !hasText( vaccine_time ) )
             {
                 vaccine_time = "00:00:00";
             }
@@ -407,28 +427,28 @@ public final class IchicsrUtils
             drug.setDrugenddate( drugenddate );
         }
 
-        if ( StringUtils.hasText( diluent_name ) )
+        if ( hasText( diluent_name ) )
         {
             List<String> diluentinfo = new ArrayList<>();
 
             diluentinfo.add( "N: " + diluent_name );
 
-            if ( StringUtils.hasText( diluent_batch ) )
+            if ( hasText( diluent_batch ) )
             {
                 diluentinfo.add( "B: " + diluent_batch );
             }
 
-            if ( StringUtils.hasText( diluent_expiry ) )
+            if ( hasText( diluent_expiry ) )
             {
                 diluentinfo.add( "EX: " + diluent_expiry );
             }
 
-            if ( StringUtils.hasText( diluent_dor ) )
+            if ( hasText( diluent_dor ) )
             {
                 diluentinfo.add( "DR: " + diluent_dor );
             }
 
-            if ( StringUtils.hasText( diluent_tor ) )
+            if ( hasText( diluent_tor ) )
             {
                 diluentinfo.add( "TR: " + diluent_tor );
             }
@@ -448,17 +468,17 @@ public final class IchicsrUtils
         Map<String, String> dataValues = te.getDataValues();
         AefiMappingProperties mapping = aefiProperties.getDhis2().getMapping();
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_severe_local_reaction() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_severe_local_reaction() ) ) )
         {
             List<String> reactionList = new ArrayList<>();
             reactionList.add( "Severe local reaction" );
 
-            if ( StringUtils.hasText( dataValues.get( mapping.getReaction_above_3_days() ) ) )
+            if ( hasText( dataValues.get( mapping.getReaction_above_3_days() ) ) )
             {
                 reactionList.add( ">3 days" );
             }
 
-            if ( StringUtils.hasText( dataValues.get( mapping.getReaction_beyond_nearest_joint() ) ) )
+            if ( hasText( dataValues.get( mapping.getReaction_beyond_nearest_joint() ) ) )
             {
                 reactionList.add( "Beyond nearest joint" );
             }
@@ -466,11 +486,11 @@ public final class IchicsrUtils
             reactions.add( createReaction( aefiProperties, te, reactionList ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_seizures() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_seizures() ) ) )
         {
             String seizureType = dataValues.get( mapping.getReaction_seizures_type() );
 
-            if ( StringUtils.hasText( seizureType ) )
+            if ( hasText( seizureType ) )
             {
                 reactions.add( createReaction( aefiProperties, te, "Seizures (" + seizureType + ")" ) );
             }
@@ -480,172 +500,172 @@ public final class IchicsrUtils
             }
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_abscess() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_abscess() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Abscess" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_sepsis() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_sepsis() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Sepsis" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_encephalopathy() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_encephalopathy() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Encephalopathy" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_toxic_shock_syndrome() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_toxic_shock_syndrome() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Toxic shock syndrome" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_thrombocytopenia() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_thrombocytopenia() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Thrombocytopenia" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_anaphylaxis() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_anaphylaxis() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Anaphylaxis" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_fever_above_38() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_fever_above_38() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Fever (> 38°C)" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_headache() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_headache() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Headache" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_irritability() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_irritability() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Irritability" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_sore_throat() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_sore_throat() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Sore Throat" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_joint_pain() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_joint_pain() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Joint Pain" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_abdominal_pain() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_abdominal_pain() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Abdominal Pain" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_cough() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_cough() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Cough" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_nausea() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_nausea() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Nausea" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_diarrhoea() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_diarrhoea() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Diarrhoea" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_fatigue() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_fatigue() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Fatigue" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_vomiting() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_vomiting() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Vomiting" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_injection_site_soreness() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_injection_site_soreness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Injection site soreness" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_injection_site_tenderness() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_injection_site_tenderness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Injection site tenderness" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_skin_rash() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_skin_rash() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Skin rash" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_itchingh() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_itchingh() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Itching" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_muscle_pain() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_muscle_pain() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Muscle pain" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_persistent_crying() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_persistent_crying() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Persistent crying" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_poor_breast_feeding() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_poor_breast_feeding() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Poor breast feeding" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_loss_of_apetite() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_loss_of_apetite() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Loss of apetite" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_chills() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_chills() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Chills" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_fainting() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_fainting() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Fainting" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_mild_fever() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_mild_fever() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Mild fever" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_tiredness() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_tiredness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Tiredness" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_nasal_congestion() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_nasal_congestion() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Nasal congestion" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_lymph_node_enlargement() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_lymph_node_enlargement() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Lymph node enlargement" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_dizziness() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_dizziness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Dizziness" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_drowsiness() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_drowsiness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Drowsiness" ) );
         }
 
-        if ( StringUtils.hasText( dataValues.get( mapping.getReaction_other() ) ) )
+        if ( hasText( dataValues.get( mapping.getReaction_other() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, dataValues.get( mapping.getReaction_other() ) ) );
         }
@@ -679,9 +699,9 @@ public final class IchicsrUtils
         String reactionStartTime = te.getDataValues()
             .get( aefiProperties.getDhis2().getMapping().getReaction_start_time() );
 
-        if ( StringUtils.hasText( reactionStartDate ) )
+        if ( hasText( reactionStartDate ) )
         {
-            if ( !StringUtils.hasText( reactionStartTime ) )
+            if ( !hasText( reactionStartTime ) )
             {
                 reactionStartTime = "00:00:00";
             }
@@ -694,7 +714,7 @@ public final class IchicsrUtils
 
         String outcome = getReactionOutcome( aefiProperties, te );
 
-        if ( StringUtils.hasText( outcome ) )
+        if ( hasText( outcome ) )
         {
             Reactionoutcome reactionoutcome = new Reactionoutcome();
             reactionoutcome.setvalue( outcome );
@@ -704,46 +724,7 @@ public final class IchicsrUtils
         return reaction;
     }
 
-    private static String getReactionOutcome( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
-    {
-        String value = te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReaction_outcome() );
-
-        switch ( value )
-        {
-        case "Recovered/resolved":
-            return "1";
-        case "Recovering/resolving":
-            return "2";
-        case "Not recovered/not resolved":
-            return "3";
-        case "Recovered/resolved with sequelae":
-            return "4";
-        case "Died":
-        case "DiedAutopsy done":
-            return "5";
-        case "Unknown":
-            return "6";
-        }
-
-        return value;
-    }
-
-    private static String getPatientSex( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
-    {
-        String gender = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getGender() );
-
-        switch ( gender )
-        {
-        case "MALE":
-            return "1";
-        case "FEMALE":
-            return "2";
-        }
-
-        return "";
-    }
-
-    private static Summary createSummary( MappedTrackedEntityInstance te )
+    private static Summary createSummary( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         Summary summary = new Summary();
 
@@ -753,7 +734,8 @@ public final class IchicsrUtils
         return summary;
     }
 
-    private static Medicalhistoryepisode createMedicalHistoryEpisode( MappedTrackedEntityInstance te )
+    private static Medicalhistoryepisode createMedicalHistoryEpisode( AefiProperties aefiProperties,
+        MappedTrackedEntityInstance te )
     {
         Medicalhistoryepisode medicalhistoryepisode = new Medicalhistoryepisode();
 
@@ -763,7 +745,7 @@ public final class IchicsrUtils
         return medicalhistoryepisode;
     }
 
-    private static Primarysource createPrimarySource( MappedTrackedEntityInstance te )
+    private static Primarysource createPrimarySource( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         Primarysource primarysource = new Primarysource();
 
@@ -782,7 +764,7 @@ public final class IchicsrUtils
         return primarysource;
     }
 
-    private static Receiver createReceiver( MappedTrackedEntityInstance te )
+    private static Receiver createReceiver( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         Receiver receiver = new Receiver();
 
@@ -791,17 +773,17 @@ public final class IchicsrUtils
         receiver.setReceivertype( receivertype );
 
         Receiverorganization receiverorganization = new Receiverorganization();
-        receiverorganization.setvalue( "XXX" );
+        receiverorganization.setvalue( aefiProperties.getE2b().getReceiverOrganization() );
         receiver.setReceiverorganization( receiverorganization );
 
         Receivercountrycode receivercountrycode = new Receivercountrycode();
-        receivercountrycode.setvalue( "XXX" );
+        receivercountrycode.setvalue( aefiProperties.getE2b().getReceiverCode() );
         receiver.setReceivercountrycode( receivercountrycode );
 
         return receiver;
     }
 
-    private static Sender createSender( MappedTrackedEntityInstance te )
+    private static Sender createSender( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         Sender sender = new Sender();
 
@@ -845,6 +827,87 @@ public final class IchicsrUtils
         }
 
         return te;
+    }
+
+    private static String getReactionOutcome( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
+    {
+        String value = te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReaction_outcome() );
+
+        switch ( value )
+        {
+        case "Recovered/resolved":
+            return "1";
+        case "Recovering/resolving":
+            return "2";
+        case "Not recovered/not resolved":
+            return "3";
+        case "Recovered/resolved with sequelae":
+            return "4";
+        case "Died":
+        case "DiedAutopsy done":
+            return "5";
+        case "Unknown":
+            return "6";
+        }
+
+        return value;
+    }
+
+    private static String getPatientGender( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
+    {
+        String gender = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_gender() );
+
+        switch ( gender )
+        {
+        case "MALE":
+            return "1";
+        case "FEMALE":
+            return "2";
+        }
+
+        return "";
+    }
+
+    private static String getYesNo( String value )
+    {
+        if ( "true".equals( value ) )
+        {
+            return "1";
+        }
+
+        return "2";
+    }
+
+    private static String getPatientName( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
+    {
+        String givenName = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_given_name() );
+        String familyName = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_family_name() );
+
+        String name = "ANON";
+
+        if ( hasText( givenName ) )
+        {
+            name = givenName;
+
+            if ( hasText( familyName ) )
+            {
+                name = givenName + " " + familyName;
+            }
+        }
+
+        return name;
+    }
+
+    private static String getPatientBirthdate( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
+    {
+        String birthdate = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_birthdate() );
+
+        if ( hasText( birthdate ) )
+        {
+            return DateUtils.dateFormat102( LocalDateTime.parse( birthdate + "T00:00:00" ) );
+        }
+
+        return null;
     }
 
     private IchicsrUtils()
