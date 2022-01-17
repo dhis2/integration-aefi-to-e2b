@@ -81,10 +81,19 @@ public class AefiMappingProperties
     private String seriousness_other;
 
     @NotNull
+    private String seriousness_other_medical_comment;
+
+    @NotNull
+    private String seriousness_medical_comment;
+
+    @NotNull
     private String reporter_name;
 
     @NotNull
     private String reporter_organization;
+
+    @NotNull
+    private String reporter_comment;
 
     @NotNull
     private String vaccine1_name;

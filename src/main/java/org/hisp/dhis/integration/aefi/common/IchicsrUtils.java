@@ -289,7 +289,11 @@ public final class IchicsrUtils
         patientsex.setvalue( getPatientGender( aefiProperties, te ) );
         patient.setPatientsex( patientsex );
 
-        patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( aefiProperties, te ) );
+        if ( hasText(
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_other_medical_comment() ) ) )
+        {
+            patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( aefiProperties, te ) );
+        }
 
         patient.getDrug().addAll( createDrugs( aefiProperties, te ) );
         patient.getReaction().addAll( createReactions( aefiProperties, te ) );
@@ -729,7 +733,9 @@ public final class IchicsrUtils
         Summary summary = new Summary();
 
         Reportercomment reportercomment = new Reportercomment();
-        reportercomment.setvalue( "XXX" );
+        reportercomment
+            .setvalue( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReporter_comment() ) );
+        summary.setReportercomment( reportercomment );
 
         return summary;
     }
@@ -740,7 +746,9 @@ public final class IchicsrUtils
         Medicalhistoryepisode medicalhistoryepisode = new Medicalhistoryepisode();
 
         Patientmedicalcomment patientmedicalcomment = new Patientmedicalcomment();
-        patientmedicalcomment.setvalue( "XXX" );
+        patientmedicalcomment.setvalue(
+            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_medical_comment() ) );
+        medicalhistoryepisode.setPatientmedicalcomment( patientmedicalcomment );
 
         return medicalhistoryepisode;
     }
@@ -749,16 +757,19 @@ public final class IchicsrUtils
     {
         Primarysource primarysource = new Primarysource();
 
+        String reporterName = te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReporter_name() );
+
         Reportergivename reportergivename = new Reportergivename();
-        reportergivename.setvalue( "XXX" );
+        reportergivename.setvalue( reporterName );
         primarysource.setReportergivename( reportergivename );
 
         Reporterorganization reporterorganization = new Reporterorganization();
-        reporterorganization.setvalue( "XXX" );
+        reporterorganization
+            .setvalue( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReporter_organization() ) );
         primarysource.setReporterorganization( reporterorganization );
 
         Qualification qualification = new Qualification();
-        qualification.setvalue( "XXX" );
+        qualification.setvalue( reporterName.startsWith( "DR " ) ? "1" : "3" );
         primarysource.setQualification( qualification );
 
         return primarysource;
