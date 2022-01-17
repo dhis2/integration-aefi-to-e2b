@@ -63,8 +63,12 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Messagesenderidentifier;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Messagetype;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Occurcountry;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Patient;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientautopsyyesno;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Patientbirthdate;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Patientbirthdateformat;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientdeath;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientdeathdate;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Patientdeathdateformat;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Patientinitial;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Patientmedicalcomment;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Patientsex;
@@ -289,10 +293,47 @@ public final class IchicsrUtils
         patientsex.setvalue( getPatientGender( aefiProperties, te ) );
         patient.setPatientsex( patientsex );
 
-        if ( hasText(
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_other_medical_comment() ) ) )
+        patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( aefiProperties, te ) );
+
+        if ( isTrue( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_death() ) ) )
         {
-            patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( aefiProperties, te ) );
+            Patientdeath patientdeath = new Patientdeath();
+
+            String deathDate = te.getDataValues()
+                .get( aefiProperties.getDhis2().getMapping().getSeriousness_death_date() );
+            String deathAutopsy = te.getDataValues()
+                .get( aefiProperties.getDhis2().getMapping().getSeriousness_death_autopsy() );
+
+            if ( hasText( deathDate ) )
+            {
+                LocalDateTime dateTime = LocalDateTime.parse( deathDate + "T00:00:00" );
+
+                Patientdeathdateformat patientdeathdateformat = new Patientdeathdateformat();
+                patientdeathdateformat.setvalue( "102" );
+                patientdeath.setPatientdeathdateformat( patientdeathdateformat );
+
+                Patientdeathdate patientdeathdate = new Patientdeathdate();
+                patientdeathdate.setvalue( DateUtils.dateFormat102( dateTime ) );
+                patientdeath.setPatientdeathdate( patientdeathdate );
+            }
+
+            if ( hasText( deathAutopsy ) )
+            {
+                Patientautopsyyesno patientautopsyyesno = new Patientautopsyyesno();
+
+                if ( "Autopsy done".equals( deathAutopsy ) )
+                {
+                    patientautopsyyesno.setvalue( "1" );
+                }
+                else
+                {
+                    patientautopsyyesno.setvalue( "2" );
+                }
+
+                patientdeath.setPatientautopsyyesno( patientautopsyyesno );
+            }
+
+            patient.setPatientdeath( patientdeath );
         }
 
         patient.getDrug().addAll( createDrugs( aefiProperties, te ) );
@@ -301,6 +342,11 @@ public final class IchicsrUtils
         patient.setSummary( createSummary( aefiProperties, te ) );
 
         return patient;
+    }
+
+    private static boolean isTrue( String value )
+    {
+        return "true".equals( value );
     }
 
     private static List<Drug> createDrugs( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
@@ -881,7 +927,7 @@ public final class IchicsrUtils
 
     private static String getYesNo( String value )
     {
-        if ( "true".equals( value ) )
+        if ( isTrue( value ) )
         {
             return "1";
         }

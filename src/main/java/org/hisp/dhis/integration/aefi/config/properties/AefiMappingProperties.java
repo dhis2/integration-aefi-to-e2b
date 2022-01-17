@@ -66,6 +66,12 @@ public class AefiMappingProperties
     private String seriousness_death;
 
     @NotNull
+    private String seriousness_death_date;
+
+    @NotNull
+    private String seriousness_death_autopsy;
+
+    @NotNull
     private String seriousness_life_threatening;
 
     @NotNull
