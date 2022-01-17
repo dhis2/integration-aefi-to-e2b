@@ -18,7 +18,7 @@ Before you start the project you need to set up some basic configuration, this y
 aefi-to-e2b:
   e2b:
     country: <<ISO3166 Country Code>>
-    sender_id: MU-DHIS2
+    sender_id: <<Sender ID, could be CountryCode-DHIS2 for example>>
     receiver_id: <<Country Vigiflow organisation>>
     receiver_organization: <<Country Vigiflow organisation>>
     receiver_code: <<ISO3166 Country Code>>
