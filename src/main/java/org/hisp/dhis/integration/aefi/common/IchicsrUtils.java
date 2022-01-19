@@ -77,6 +77,8 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysourcecountry;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Primarysourcereaction;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Qualification;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reaction;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionmeddrallt;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionmeddraversionllt;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionoutcome;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionstartdate;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Reactionstartdateformat;
@@ -533,7 +535,7 @@ public final class IchicsrUtils
                 reactionList.add( "Beyond nearest joint" );
             }
 
-            reactions.add( createReaction( aefiProperties, te, reactionList ) );
+            reactions.add( createReaction( aefiProperties, te, reactionList, "10059080" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_seizures() ) ) )
@@ -542,177 +544,185 @@ public final class IchicsrUtils
 
             if ( hasText( seizureType ) )
             {
-                reactions.add( createReaction( aefiProperties, te, "Seizures (" + seizureType + ")" ) );
+                switch ( seizureType )
+                {
+                case "AFEBRILE":
+                    reactions.add( createReaction( aefiProperties, te, "Seizure afebrile", "10001436" ) );
+                    break;
+                case "FEBRILE":
+                    reactions.add( createReaction( aefiProperties, te, "Seizure febrile", "10016290" ) );
+                    break;
+                }
             }
             else
             {
-                reactions.add( createReaction( aefiProperties, te, "Seizures" ) );
+                reactions.add( createReaction( aefiProperties, te, "Seizures", "10039906" ) );
             }
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_abscess() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Abscess" ) );
+            reactions.add( createReaction( aefiProperties, te, "Abscess", "10069556" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_sepsis() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Sepsis" ) );
+            reactions.add( createReaction( aefiProperties, te, "Sepsis", "10040047" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_encephalopathy() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Encephalopathy" ) );
+            reactions.add( createReaction( aefiProperties, te, "Encephalopathy", "10014602" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_toxic_shock_syndrome() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Toxic shock syndrome" ) );
+            reactions.add( createReaction( aefiProperties, te, "Toxic shock syndrome", "10044248" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_thrombocytopenia() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Thrombocytopenia" ) );
+            reactions.add( createReaction( aefiProperties, te, "Thrombocytopenia", "10043554" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_anaphylaxis() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Anaphylaxis" ) );
+            reactions.add( createReaction( aefiProperties, te, "Anaphylaxis", "10002218" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_fever_above_38() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Fever (> 38°C)" ) );
+            reactions.add( createReaction( aefiProperties, te, "Fever ≥38°C", "10016558" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_headache() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Headache" ) );
+            reactions.add( createReaction( aefiProperties, te, "Headache", "10019211" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_irritability() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Irritability" ) );
+            reactions.add( createReaction( aefiProperties, te, "Irritability", "10057224" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_sore_throat() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Sore Throat" ) );
+            reactions.add( createReaction( aefiProperties, te, "Sore Throat", "10041367" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_joint_pain() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Joint Pain" ) );
+            reactions.add( createReaction( aefiProperties, te, "Joint Pain", "10023222" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_abdominal_pain() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Abdominal Pain" ) );
+            reactions.add( createReaction( aefiProperties, te, "Abdominal Pain", "10000081" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_cough() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Cough" ) );
+            reactions.add( createReaction( aefiProperties, te, "Cough", "10011224" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_nausea() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Nausea" ) );
+            reactions.add( createReaction( aefiProperties, te, "Nausea", "10028813" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_diarrhoea() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Diarrhoea" ) );
+            reactions.add( createReaction( aefiProperties, te, "Diarrhoea", "10012735" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_fatigue() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Fatigue" ) );
+            reactions.add( createReaction( aefiProperties, te, "Fatigue", "10016256" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_vomiting() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Vomiting" ) );
+            reactions.add( createReaction( aefiProperties, te, "Vomiting", "10047700" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_injection_site_soreness() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Injection site soreness" ) );
+            reactions.add( createReaction( aefiProperties, te, "Injection site soreness", "10068879" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_injection_site_tenderness() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Injection site tenderness" ) );
+            reactions.add( createReaction( aefiProperties, te, "Injection site tenderness", "10069631" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_skin_rash() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Skin rash" ) );
+            reactions.add( createReaction( aefiProperties, te, "Skin rash", "10040913" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_itchingh() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Itching" ) );
+            reactions.add( createReaction( aefiProperties, te, "Itching", "10023084" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_muscle_pain() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Muscle pain" ) );
+            reactions.add( createReaction( aefiProperties, te, "Muscle pain", "10028322" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_persistent_crying() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Persistent crying" ) );
+            reactions.add( createReaction( aefiProperties, te, "Persistent crying", "10069592" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_poor_breast_feeding() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Poor breast feeding" ) );
+            reactions.add( createReaction( aefiProperties, te, "Poor breast feeding", "10006248" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_loss_of_apetite() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Loss of apetite" ) );
+            reactions.add( createReaction( aefiProperties, te, "Loss of appetite", "10003028" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_chills() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Chills" ) );
+            reactions.add( createReaction( aefiProperties, te, "Chills", "10008531" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_fainting() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Fainting" ) );
+            reactions.add( createReaction( aefiProperties, te, "Fainting", "10016169" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_mild_fever() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Mild fever" ) );
+            reactions.add( createReaction( aefiProperties, te, "Mild fever", "10041021" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_tiredness() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Tiredness" ) );
+            reactions.add( createReaction( aefiProperties, te, "Tiredness", "10043890" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_nasal_congestion() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Nasal congestion" ) );
+            reactions.add( createReaction( aefiProperties, te, "Nasal congestion", "10028735" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_lymph_node_enlargement() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Lymph node enlargement" ) );
+            reactions.add( createReaction( aefiProperties, te, "Lymph node enlargement", "10014847" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_dizziness() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Dizziness" ) );
+            reactions.add( createReaction( aefiProperties, te, "Dizziness", "10013573" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_drowsiness() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, "Drowsiness" ) );
+            reactions.add( createReaction( aefiProperties, te, "Drowsiness", "10013649" ) );
         }
 
         if ( hasText( dataValues.get( mapping.getReaction_other() ) ) )
@@ -724,19 +734,36 @@ public final class IchicsrUtils
     }
 
     private static Reaction createReaction( AefiProperties aefiProperties, MappedTrackedEntityInstance te,
-        String reaction )
+        String reaction, String mdCode )
     {
-        return createReaction( aefiProperties, te, List.of( reaction ) );
+        return createReaction( aefiProperties, te, List.of( reaction ), mdCode );
     }
 
     private static Reaction createReaction( AefiProperties aefiProperties, MappedTrackedEntityInstance te,
-        List<String> reactionList )
+        String reaction )
+    {
+        return createReaction( aefiProperties, te, List.of( reaction ), null );
+    }
+
+    private static Reaction createReaction( AefiProperties aefiProperties, MappedTrackedEntityInstance te,
+        List<String> reactionList, String mdCode )
     {
         Reaction reaction = new Reaction();
 
         Primarysourcereaction primarysourcereaction = new Primarysourcereaction();
         primarysourcereaction.setvalue( String.join( ",", reactionList ) );
         reaction.setPrimarysourcereaction( primarysourcereaction );
+
+        if ( hasText( mdCode ) )
+        {
+            Reactionmeddraversionllt reactionmeddraversionllt = new Reactionmeddraversionllt();
+            reactionmeddraversionllt.setvalue( "24.1" );
+            reaction.setReactionmeddraversionllt( reactionmeddraversionllt );
+
+            Reactionmeddrallt reactionmeddrallt = new Reactionmeddrallt();
+            reactionmeddrallt.setvalue( mdCode );
+            reaction.setReactionmeddrallt( reactionmeddrallt );
+        }
 
         Reactionstartdateformat reactionstartdateformat = new Reactionstartdateformat();
         reactionstartdateformat.setvalue( "203" );
@@ -804,6 +831,11 @@ public final class IchicsrUtils
         Primarysource primarysource = new Primarysource();
 
         String reporterName = te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReporter_name() );
+
+        if ( !hasText( reporterName ) )
+        {
+            reporterName = "";
+        }
 
         Reportergivename reportergivename = new Reportergivename();
         reportergivename.setvalue( reporterName );
@@ -890,6 +922,11 @@ public final class IchicsrUtils
     {
         String value = te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReaction_outcome() );
 
+        if ( !hasText( value ) )
+        {
+            return "";
+        }
+
         switch ( value )
         {
         case "Recovered/resolved":
@@ -913,6 +950,11 @@ public final class IchicsrUtils
     private static String getPatientGender( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         String gender = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_gender() );
+
+        if ( !hasText( gender ) )
+        {
+            return "";
+        }
 
         switch ( gender )
         {
