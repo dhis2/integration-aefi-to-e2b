@@ -14,7 +14,7 @@
   <artifactId>aefi</artifactId>
   <version>0.10.0-SNAPSHOT</version>
   <name>integration-aefi-to-e2b</name>
-  <description>DHIS2 Who AEFI package to Vigibase E2B</description>
+  <description>DHIS2 WHO AEFI package to VigiBase E2B R2</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
