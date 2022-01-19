@@ -532,7 +532,7 @@ public final class IchicsrUtils
 
             if ( hasText( dataValues.get( mapping.getReaction_beyond_nearest_joint() ) ) )
             {
-                reactionList.add( "Beyond nearest joint" );
+                reactionList.add( "beyond nearest joint" );
             }
 
             reactions.add( createReaction( aefiProperties, te, reactionList, "10059080" ) );
@@ -751,7 +751,7 @@ public final class IchicsrUtils
         Reaction reaction = new Reaction();
 
         Primarysourcereaction primarysourcereaction = new Primarysourcereaction();
-        primarysourcereaction.setvalue( String.join( ",", reactionList ) );
+        primarysourcereaction.setvalue( String.join( " ", reactionList ) );
         reaction.setPrimarysourcereaction( primarysourcereaction );
 
         if ( hasText( mdCode ) )
