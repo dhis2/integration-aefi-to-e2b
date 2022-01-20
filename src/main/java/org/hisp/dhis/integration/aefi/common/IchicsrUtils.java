@@ -754,16 +754,13 @@ public final class IchicsrUtils
         primarysourcereaction.setvalue( String.join( " ", reactionList ) );
         reaction.setPrimarysourcereaction( primarysourcereaction );
 
-        if ( hasText( mdCode ) )
-        {
-            Reactionmeddraversionllt reactionmeddraversionllt = new Reactionmeddraversionllt();
-            reactionmeddraversionllt.setvalue( "24.1" );
-            reaction.setReactionmeddraversionllt( reactionmeddraversionllt );
+        Reactionmeddraversionllt reactionmeddraversionllt = new Reactionmeddraversionllt();
+        reactionmeddraversionllt.setvalue( "24.1" );
+        reaction.setReactionmeddraversionllt( reactionmeddraversionllt );
 
-            Reactionmeddrallt reactionmeddrallt = new Reactionmeddrallt();
-            reactionmeddrallt.setvalue( mdCode );
-            reaction.setReactionmeddrallt( reactionmeddrallt );
-        }
+        Reactionmeddrallt reactionmeddrallt = new Reactionmeddrallt();
+        reactionmeddrallt.setvalue( mdCode );
+        reaction.setReactionmeddrallt( reactionmeddrallt );
 
         Reactionstartdateformat reactionstartdateformat = new Reactionstartdateformat();
         reactionstartdateformat.setvalue( "203" );
