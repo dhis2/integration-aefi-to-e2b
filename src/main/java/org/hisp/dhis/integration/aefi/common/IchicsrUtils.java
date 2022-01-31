@@ -39,6 +39,7 @@ import lombok.Data;
 
 import org.hisp.dhis.integration.aefi.config.properties.AefiMappingProperties;
 import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
+import org.hisp.dhis.integration.aefi.domain.TrackerDataValue;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Additionaldocument;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Drug;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Drugadditional;
@@ -179,7 +180,7 @@ public final class IchicsrUtils
         Safetyreportid safetyreportid = new Safetyreportid();
         safetyreportid.setvalue( aefiProperties.getE2b().getCountry() );
 
-        String patientId = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_id() );
+        String patientId = te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getPatient_id() );
 
         if ( hasText( patientId ) )
         {
@@ -209,37 +210,37 @@ public final class IchicsrUtils
         safetyreport.setReporttype( reporttype );
 
         Serious serious = new Serious();
-        serious.setvalue( getYesNo( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSerious() ) ) );
+        serious.setvalue( getYesNo( te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSerious() ) ) );
         safetyreport.setSerious( serious );
 
         Seriousnessdeath seriousnessdeath = new Seriousnessdeath();
         seriousnessdeath.setvalue(
-            getYesNo( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_death() ) ) );
+            getYesNo( te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_death() ) ) );
         safetyreport.setSeriousnessdeath( seriousnessdeath );
 
         Seriousnesslifethreatening seriousnesslifethreatening = new Seriousnesslifethreatening();
         seriousnesslifethreatening.setvalue( getYesNo(
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_life_threatening() ) ) );
+            te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_life_threatening() ) ) );
         safetyreport.setSeriousnesslifethreatening( seriousnesslifethreatening );
 
         Seriousnesshospitalization seriousnesshospitalization = new Seriousnesshospitalization();
         seriousnesshospitalization.setvalue( getYesNo(
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_hospitalization() ) ) );
+            te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_hospitalization() ) ) );
         safetyreport.setSeriousnesshospitalization( seriousnesshospitalization );
 
         Seriousnessdisabling seriousnessdisabling = new Seriousnessdisabling();
         seriousnessdisabling.setvalue(
-            getYesNo( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_disabling() ) ) );
+            getYesNo( te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_disabling() ) ) );
         safetyreport.setSeriousnessdisabling( seriousnessdisabling );
 
         Seriousnesscongenitalanomali seriousnesscongenitalanomali = new Seriousnesscongenitalanomali();
         seriousnesscongenitalanomali.setvalue( getYesNo(
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_congenital_anomali() ) ) );
+            te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_congenital_anomali() ) ) );
         safetyreport.setSeriousnesscongenitalanomali( seriousnesscongenitalanomali );
 
         Seriousnessother seriousnessother = new Seriousnessother();
         seriousnessother.setvalue(
-            getYesNo( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_other() ) ) );
+            getYesNo( te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_other() ) ) );
         safetyreport.setSeriousnessother( seriousnessother );
 
         Receivedateformat receivedateformat = new Receivedateformat();
@@ -297,14 +298,14 @@ public final class IchicsrUtils
 
         patient.getMedicalhistoryepisode().add( createMedicalHistoryEpisode( aefiProperties, te ) );
 
-        if ( isTrue( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_death() ) ) )
+        if ( isTrue( te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_death() ) ) )
         {
             Patientdeath patientdeath = new Patientdeath();
 
-            String deathDate = te.getDataValues()
-                .get( aefiProperties.getDhis2().getMapping().getSeriousness_death_date() );
-            String deathAutopsy = te.getDataValues()
-                .get( aefiProperties.getDhis2().getMapping().getSeriousness_death_autopsy() );
+            String deathDate = te
+                .getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_death_date() );
+            String deathAutopsy = te
+                .getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_death_autopsy() );
 
             if ( hasText( deathDate ) )
             {
@@ -354,58 +355,47 @@ public final class IchicsrUtils
     private static List<Drug> createDrugs( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         List<Drug> drugs = new ArrayList<>();
+        AefiMappingProperties mapping = aefiProperties.getDhis2().getMapping();
 
-        createDrug( drugs, te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_name() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_brand() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_date() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_time() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_batch() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_dose() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine1_expiry() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_name() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_batch() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_expiry() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_dor() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent1_tor() ) );
+        createDrug( drugs, te.getTrackerDataValue( mapping.getVaccine1_name() ),
+            te.getTrackerDataValue( mapping.getVaccine1_brand() ),
+            te.getTrackerDataValue( mapping.getVaccine1_date() ), te.getTrackerDataValue( mapping.getVaccine1_time() ),
+            te.getTrackerDataValue( mapping.getVaccine1_batch() ), te.getTrackerDataValue( mapping.getVaccine1_dose() ),
+            te.getTrackerDataValue( mapping.getVaccine1_expiry() ),
+            te.getTrackerDataValue( mapping.getDiluent1_name() ),
+            te.getTrackerDataValue( mapping.getDiluent1_batch() ),
+            te.getTrackerDataValue( mapping.getDiluent1_expiry() ),
+            te.getTrackerDataValue( mapping.getDiluent1_dor() ), te.getTrackerDataValue( mapping.getDiluent1_tor() ) );
 
-        createDrug( drugs, te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_name() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_brand() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_date() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_time() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_batch() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_dose() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine2_expiry() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_name() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_batch() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_expiry() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_dor() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent2_tor() ) );
+        createDrug( drugs, te.getTrackerDataValue( mapping.getVaccine2_name() ),
+            te.getTrackerDataValue( mapping.getVaccine2_brand() ),
+            te.getTrackerDataValue( mapping.getVaccine2_date() ), te.getTrackerDataValue( mapping.getVaccine2_time() ),
+            te.getTrackerDataValue( mapping.getVaccine2_batch() ), te.getTrackerDataValue( mapping.getVaccine2_dose() ),
+            te.getTrackerDataValue( mapping.getVaccine2_expiry() ),
+            te.getTrackerDataValue( mapping.getDiluent2_name() ),
+            te.getTrackerDataValue( mapping.getDiluent2_batch() ),
+            te.getTrackerDataValue( mapping.getDiluent2_expiry() ),
+            te.getTrackerDataValue( mapping.getDiluent2_dor() ), te.getTrackerDataValue( mapping.getDiluent2_tor() ) );
 
-        createDrug( drugs, te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_name() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_brand() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_date() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_time() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_batch() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_dose() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine3_expiry() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_name() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_batch() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_expiry() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_dor() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent3_tor() ) );
+        createDrug( drugs, te.getTrackerDataValue( mapping.getVaccine3_name() ),
+            te.getTrackerDataValue( mapping.getVaccine3_brand() ),
+            te.getTrackerDataValue( mapping.getVaccine3_date() ), te.getTrackerDataValue( mapping.getVaccine3_time() ),
+            te.getTrackerDataValue( mapping.getVaccine3_batch() ), te.getTrackerDataValue( mapping.getVaccine3_dose() ),
+            te.getTrackerDataValue( mapping.getVaccine3_expiry() ),
+            te.getTrackerDataValue( mapping.getDiluent3_name() ),
+            te.getTrackerDataValue( mapping.getDiluent3_batch() ),
+            te.getTrackerDataValue( mapping.getDiluent3_expiry() ),
+            te.getTrackerDataValue( mapping.getDiluent3_dor() ), te.getTrackerDataValue( mapping.getDiluent3_tor() ) );
 
-        createDrug( drugs, te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_name() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_brand() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_date() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_time() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_batch() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_dose() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getVaccine4_expiry() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_name() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_batch() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_expiry() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_dor() ),
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getDiluent4_tor() ) );
+        createDrug( drugs, te.getTrackerDataValue( mapping.getVaccine4_name() ),
+            te.getTrackerDataValue( mapping.getVaccine4_brand() ),
+            te.getTrackerDataValue( mapping.getVaccine4_date() ), te.getTrackerDataValue( mapping.getVaccine4_time() ),
+            te.getTrackerDataValue( mapping.getVaccine4_batch() ), te.getTrackerDataValue( mapping.getVaccine4_dose() ),
+            te.getTrackerDataValue( mapping.getVaccine4_expiry() ),
+            te.getTrackerDataValue( mapping.getDiluent4_name() ),
+            te.getTrackerDataValue( mapping.getDiluent4_batch() ),
+            te.getTrackerDataValue( mapping.getDiluent4_expiry() ),
+            te.getTrackerDataValue( mapping.getDiluent4_dor() ), te.getTrackerDataValue( mapping.getDiluent4_tor() ) );
 
         return drugs;
     }
@@ -516,21 +506,19 @@ public final class IchicsrUtils
     private static List<Reaction> createReactions( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         List<Reaction> reactions = new ArrayList<>();
-
-        Map<String, String> dataValues = te.getDataValues();
         AefiMappingProperties mapping = aefiProperties.getDhis2().getMapping();
 
-        if ( hasText( dataValues.get( mapping.getReaction_severe_local_reaction() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_severe_local_reaction() ) ) )
         {
             List<String> reactionList = new ArrayList<>();
             reactionList.add( "Severe local reaction" );
 
-            if ( hasText( dataValues.get( mapping.getReaction_above_3_days() ) ) )
+            if ( hasText( te.getTrackerDataValue( mapping.getReaction_above_3_days() ) ) )
             {
                 reactionList.add( ">3 days" );
             }
 
-            if ( hasText( dataValues.get( mapping.getReaction_beyond_nearest_joint() ) ) )
+            if ( hasText( te.getTrackerDataValue( mapping.getReaction_beyond_nearest_joint() ) ) )
             {
                 reactionList.add( "beyond nearest joint" );
             }
@@ -538,9 +526,9 @@ public final class IchicsrUtils
             reactions.add( createReaction( aefiProperties, te, reactionList, "10059080" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_seizures() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_seizures() ) ) )
         {
-            String seizureType = dataValues.get( mapping.getReaction_seizures_type() );
+            String seizureType = te.getTrackerDataValue( mapping.getReaction_seizures_type() );
 
             if ( hasText( seizureType ) )
             {
@@ -560,174 +548,175 @@ public final class IchicsrUtils
             }
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_abscess() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_abscess() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Abscess", "10069556" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_sepsis() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_sepsis() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Sepsis", "10040047" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_encephalopathy() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_encephalopathy() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Encephalopathy", "10014602" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_toxic_shock_syndrome() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_toxic_shock_syndrome() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Toxic shock syndrome", "10044248" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_thrombocytopenia() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_thrombocytopenia() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Thrombocytopenia", "10043554" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_anaphylaxis() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_anaphylaxis() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Anaphylaxis", "10002218" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_fever_above_38() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_fever_above_38() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Fever ≥38°C", "10016558" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_headache() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_headache() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Headache", "10019211" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_irritability() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_irritability() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Irritability", "10057224" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_sore_throat() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_sore_throat() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Sore Throat", "10041367" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_joint_pain() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_joint_pain() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Joint Pain", "10023222" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_abdominal_pain() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_abdominal_pain() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Abdominal Pain", "10000081" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_cough() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_cough() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Cough", "10011224" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_nausea() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_nausea() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Nausea", "10028813" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_diarrhoea() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_diarrhoea() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Diarrhoea", "10012735" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_fatigue() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_fatigue() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Fatigue", "10016256" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_vomiting() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_vomiting() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Vomiting", "10047700" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_injection_site_soreness() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_injection_site_soreness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Injection site soreness", "10068879" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_injection_site_tenderness() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_injection_site_tenderness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Injection site tenderness", "10069631" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_skin_rash() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_skin_rash() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Skin rash", "10040913" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_itchingh() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_itchingh() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Itching", "10023084" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_muscle_pain() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_muscle_pain() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Muscle pain", "10028322" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_persistent_crying() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_persistent_crying() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Persistent crying", "10069592" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_poor_breast_feeding() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_poor_breast_feeding() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Poor breast feeding", "10006248" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_loss_of_apetite() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_loss_of_apetite() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Loss of appetite", "10003028" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_chills() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_chills() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Chills", "10008531" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_fainting() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_fainting() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Fainting", "10016169" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_mild_fever() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_mild_fever() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Mild fever", "10041021" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_tiredness() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_tiredness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Tiredness", "10043890" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_nasal_congestion() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_nasal_congestion() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Nasal congestion", "10028735" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_lymph_node_enlargement() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_lymph_node_enlargement() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Lymph node enlargement", "10014847" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_dizziness() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_dizziness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Dizziness", "10013573" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_drowsiness() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_drowsiness() ) ) )
         {
             reactions.add( createReaction( aefiProperties, te, "Drowsiness", "10013649" ) );
         }
 
-        if ( hasText( dataValues.get( mapping.getReaction_other() ) ) )
+        if ( hasText( te.getTrackerDataValue( mapping.getReaction_other() ) ) )
         {
-            reactions.add( createReaction( aefiProperties, te, dataValues.get( mapping.getReaction_other() ) ) );
+            reactions
+                .add( createReaction( aefiProperties, te, te.getTrackerDataValue( mapping.getReaction_other() ) ) );
         }
 
         return reactions;
@@ -768,10 +757,10 @@ public final class IchicsrUtils
 
         Reactionstartdate reactionstartdate = new Reactionstartdate();
 
-        String reactionStartDate = te.getDataValues()
-            .get( aefiProperties.getDhis2().getMapping().getReaction_start_date() );
-        String reactionStartTime = te.getDataValues()
-            .get( aefiProperties.getDhis2().getMapping().getReaction_start_time() );
+        String reactionStartDate = te
+            .getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReaction_start_date() );
+        String reactionStartTime = te
+            .getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReaction_start_time() );
 
         if ( hasText( reactionStartDate ) )
         {
@@ -804,7 +793,7 @@ public final class IchicsrUtils
 
         Reportercomment reportercomment = new Reportercomment();
         reportercomment
-            .setvalue( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReporter_comment() ) );
+            .setvalue( te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReporter_comment() ) );
         summary.setReportercomment( reportercomment );
 
         return summary;
@@ -817,7 +806,7 @@ public final class IchicsrUtils
 
         Patientmedicalcomment patientmedicalcomment = new Patientmedicalcomment();
         patientmedicalcomment.setvalue(
-            te.getDataValues().get( aefiProperties.getDhis2().getMapping().getSeriousness_medical_comment() ) );
+            te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getSeriousness_medical_comment() ) );
         medicalhistoryepisode.setPatientmedicalcomment( patientmedicalcomment );
 
         return medicalhistoryepisode;
@@ -827,7 +816,7 @@ public final class IchicsrUtils
     {
         Primarysource primarysource = new Primarysource();
 
-        String reporterName = te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReporter_name() );
+        String reporterName = te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReporter_name() );
 
         if ( !hasText( reporterName ) )
         {
@@ -840,7 +829,7 @@ public final class IchicsrUtils
 
         Reporterorganization reporterorganization = new Reporterorganization();
         reporterorganization
-            .setvalue( te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReporter_organization() ) );
+            .setvalue( te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReporter_organization() ) );
         primarysource.setReporterorganization( reporterorganization );
 
         Qualification qualification = new Qualification();
@@ -917,7 +906,7 @@ public final class IchicsrUtils
 
     private static String getReactionOutcome( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
-        String value = te.getDataValues().get( aefiProperties.getDhis2().getMapping().getReaction_outcome() );
+        String value = te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReaction_outcome() );
 
         if ( !hasText( value ) )
         {
@@ -946,7 +935,7 @@ public final class IchicsrUtils
 
     private static String getPatientGender( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
-        String gender = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_gender() );
+        String gender = te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getPatient_gender() );
 
         if ( !hasText( gender ) )
         {
@@ -976,8 +965,8 @@ public final class IchicsrUtils
 
     private static String getPatientName( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
-        String givenName = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_given_name() );
-        String familyName = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_family_name() );
+        String givenName = te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getPatient_given_name() );
+        String familyName = te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getPatient_family_name() );
 
         String name = "ANON";
 
@@ -996,7 +985,7 @@ public final class IchicsrUtils
 
     private static String getPatientBirthdate( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
-        String birthdate = te.getAttributes().get( aefiProperties.getDhis2().getMapping().getPatient_birthdate() );
+        String birthdate = te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getPatient_birthdate() );
 
         if ( hasText( birthdate ) )
         {
@@ -1023,4 +1012,18 @@ class MappedTrackedEntityInstance
     private Map<String, String> attributes = new HashMap<>();
 
     private Map<String, String> dataValues = new HashMap<>();
+
+    public String getTrackerDataValue( TrackerDataValue value )
+    {
+        if ( value.isAttribute() && attributes.containsKey( value.getId() ) )
+        {
+            return attributes.get( value.getId() );
+        }
+        else if ( value.isDataElement() && dataValues.containsKey( value.getId() ) )
+        {
+            return dataValues.get( value.getId() );
+        }
+
+        return null;
+    }
 }

@@ -31,6 +31,7 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
+import org.hisp.dhis.integration.aefi.domain.TrackerDataValue;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -45,329 +46,329 @@ public class AefiMappingProperties
     private String program;
 
     @NotNull
-    private String patient_id;
+    private TrackerDataValue patient_id;
 
     @NotNull
-    private String patient_gender;
+    private TrackerDataValue patient_gender;
 
     @NotNull
-    private String patient_given_name;
+    private TrackerDataValue patient_given_name;
 
     @NotNull
-    private String patient_family_name;
+    private TrackerDataValue patient_family_name;
 
     @NotNull
-    private String patient_birthdate;
+    private TrackerDataValue patient_birthdate;
 
     @NotNull
-    private String serious;
+    private TrackerDataValue serious;
 
     @NotNull
-    private String seriousness_death;
+    private TrackerDataValue seriousness_death;
 
     @NotNull
-    private String seriousness_death_date;
+    private TrackerDataValue seriousness_death_date;
 
     @NotNull
-    private String seriousness_death_autopsy;
+    private TrackerDataValue seriousness_death_autopsy;
 
     @NotNull
-    private String seriousness_life_threatening;
+    private TrackerDataValue seriousness_life_threatening;
 
     @NotNull
-    private String seriousness_hospitalization;
+    private TrackerDataValue seriousness_hospitalization;
 
     @NotNull
-    private String seriousness_disabling;
+    private TrackerDataValue seriousness_disabling;
 
     @NotNull
-    private String seriousness_congenital_anomali;
+    private TrackerDataValue seriousness_congenital_anomali;
 
     @NotNull
-    private String seriousness_other;
+    private TrackerDataValue seriousness_other;
 
     @NotNull
-    private String seriousness_other_medical_comment;
+    private TrackerDataValue seriousness_other_medical_comment;
 
     @NotNull
-    private String seriousness_medical_comment;
+    private TrackerDataValue seriousness_medical_comment;
 
     @NotNull
-    private String reporter_name;
+    private TrackerDataValue reporter_name;
 
     @NotNull
-    private String reporter_organization;
+    private TrackerDataValue reporter_organization;
 
     @NotNull
-    private String reporter_comment;
+    private TrackerDataValue reporter_comment;
 
     @NotNull
-    private String vaccine1_name;
+    private TrackerDataValue vaccine1_name;
 
     @NotNull
-    private String vaccine1_brand;
+    private TrackerDataValue vaccine1_brand;
 
     @NotNull
-    private String vaccine1_date;
+    private TrackerDataValue vaccine1_date;
 
     @NotNull
-    private String vaccine1_time;
+    private TrackerDataValue vaccine1_time;
 
     @NotNull
-    private String vaccine1_batch;
+    private TrackerDataValue vaccine1_batch;
 
     @NotNull
-    private String vaccine1_dose;
+    private TrackerDataValue vaccine1_dose;
 
     @NotNull
-    private String vaccine1_expiry;
+    private TrackerDataValue vaccine1_expiry;
 
     @NotNull
-    private String diluent1_name;
+    private TrackerDataValue diluent1_name;
 
     @NotNull
-    private String diluent1_batch;
+    private TrackerDataValue diluent1_batch;
 
     @NotNull
-    private String diluent1_expiry;
+    private TrackerDataValue diluent1_expiry;
 
     @NotNull
-    private String diluent1_dor;
+    private TrackerDataValue diluent1_dor;
 
     @NotNull
-    private String diluent1_tor;
+    private TrackerDataValue diluent1_tor;
 
     @NotNull
-    private String vaccine2_name;
+    private TrackerDataValue vaccine2_name;
 
     @NotNull
-    private String vaccine2_brand;
+    private TrackerDataValue vaccine2_brand;
 
     @NotNull
-    private String vaccine2_date;
+    private TrackerDataValue vaccine2_date;
 
     @NotNull
-    private String vaccine2_time;
+    private TrackerDataValue vaccine2_time;
 
     @NotNull
-    private String vaccine2_batch;
+    private TrackerDataValue vaccine2_batch;
 
     @NotNull
-    private String vaccine2_dose;
+    private TrackerDataValue vaccine2_dose;
 
     @NotNull
-    private String vaccine2_expiry;
+    private TrackerDataValue vaccine2_expiry;
 
     @NotNull
-    private String diluent2_name;
+    private TrackerDataValue diluent2_name;
 
     @NotNull
-    private String diluent2_batch;
+    private TrackerDataValue diluent2_batch;
 
     @NotNull
-    private String diluent2_expiry;
+    private TrackerDataValue diluent2_expiry;
 
     @NotNull
-    private String diluent2_dor;
+    private TrackerDataValue diluent2_dor;
 
     @NotNull
-    private String diluent2_tor;
+    private TrackerDataValue diluent2_tor;
 
     @NotNull
-    private String vaccine3_name;
+    private TrackerDataValue vaccine3_name;
 
     @NotNull
-    private String vaccine3_brand;
+    private TrackerDataValue vaccine3_brand;
 
     @NotNull
-    private String vaccine3_date;
+    private TrackerDataValue vaccine3_date;
 
     @NotNull
-    private String vaccine3_time;
+    private TrackerDataValue vaccine3_time;
 
     @NotNull
-    private String vaccine3_batch;
+    private TrackerDataValue vaccine3_batch;
 
     @NotNull
-    private String vaccine3_dose;
+    private TrackerDataValue vaccine3_dose;
 
     @NotNull
-    private String vaccine3_expiry;
+    private TrackerDataValue vaccine3_expiry;
 
     @NotNull
-    private String diluent3_name;
+    private TrackerDataValue diluent3_name;
 
     @NotNull
-    private String diluent3_batch;
+    private TrackerDataValue diluent3_batch;
 
     @NotNull
-    private String diluent3_expiry;
+    private TrackerDataValue diluent3_expiry;
 
     @NotNull
-    private String diluent3_dor;
+    private TrackerDataValue diluent3_dor;
 
     @NotNull
-    private String diluent3_tor;
+    private TrackerDataValue diluent3_tor;
 
     @NotNull
-    private String vaccine4_name;
+    private TrackerDataValue vaccine4_name;
 
     @NotNull
-    private String vaccine4_brand;
+    private TrackerDataValue vaccine4_brand;
 
     @NotNull
-    private String vaccine4_date;
+    private TrackerDataValue vaccine4_date;
 
     @NotNull
-    private String vaccine4_time;
+    private TrackerDataValue vaccine4_time;
 
     @NotNull
-    private String vaccine4_batch;
+    private TrackerDataValue vaccine4_batch;
 
     @NotNull
-    private String vaccine4_dose;
+    private TrackerDataValue vaccine4_dose;
 
     @NotNull
-    private String vaccine4_expiry;
+    private TrackerDataValue vaccine4_expiry;
 
     @NotNull
-    private String diluent4_name;
+    private TrackerDataValue diluent4_name;
 
     @NotNull
-    private String diluent4_batch;
+    private TrackerDataValue diluent4_batch;
 
     @NotNull
-    private String diluent4_expiry;
+    private TrackerDataValue diluent4_expiry;
 
     @NotNull
-    private String diluent4_dor;
+    private TrackerDataValue diluent4_dor;
 
     @NotNull
-    private String diluent4_tor;
+    private TrackerDataValue diluent4_tor;
 
     @NotNull
-    private String reaction_start_date;
+    private TrackerDataValue reaction_start_date;
 
     @NotNull
-    private String reaction_start_time;
+    private TrackerDataValue reaction_start_time;
 
     @NotNull
-    private String reaction_outcome;
+    private TrackerDataValue reaction_outcome;
 
     @NotNull
-    private String reaction_severe_local_reaction;
+    private TrackerDataValue reaction_severe_local_reaction;
 
     @NotNull
-    private String reaction_above_3_days;
+    private TrackerDataValue reaction_above_3_days;
 
     @NotNull
-    private String reaction_beyond_nearest_joint;
+    private TrackerDataValue reaction_beyond_nearest_joint;
 
     @NotNull
-    private String reaction_seizures;
+    private TrackerDataValue reaction_seizures;
 
     @NotNull
-    private String reaction_seizures_type;
+    private TrackerDataValue reaction_seizures_type;
 
     @NotNull
-    private String reaction_abscess;
+    private TrackerDataValue reaction_abscess;
 
     @NotNull
-    private String reaction_sepsis;
+    private TrackerDataValue reaction_sepsis;
 
     @NotNull
-    private String reaction_encephalopathy;
+    private TrackerDataValue reaction_encephalopathy;
 
     @NotNull
-    private String reaction_toxic_shock_syndrome;
+    private TrackerDataValue reaction_toxic_shock_syndrome;
 
     @NotNull
-    private String reaction_thrombocytopenia;
+    private TrackerDataValue reaction_thrombocytopenia;
 
     @NotNull
-    private String reaction_anaphylaxis;
+    private TrackerDataValue reaction_anaphylaxis;
 
     @NotNull
-    private String reaction_fever_above_38;
+    private TrackerDataValue reaction_fever_above_38;
 
     @NotNull
-    private String reaction_headache;
+    private TrackerDataValue reaction_headache;
 
     @NotNull
-    private String reaction_irritability;
+    private TrackerDataValue reaction_irritability;
 
     @NotNull
-    private String reaction_sore_throat;
+    private TrackerDataValue reaction_sore_throat;
 
     @NotNull
-    private String reaction_joint_pain;
+    private TrackerDataValue reaction_joint_pain;
 
     @NotNull
-    private String reaction_abdominal_pain;
+    private TrackerDataValue reaction_abdominal_pain;
 
     @NotNull
-    private String reaction_cough;
+    private TrackerDataValue reaction_cough;
 
     @NotNull
-    private String reaction_nausea;
+    private TrackerDataValue reaction_nausea;
 
     @NotNull
-    private String reaction_diarrhoea;
+    private TrackerDataValue reaction_diarrhoea;
 
     @NotNull
-    private String reaction_fatigue;
+    private TrackerDataValue reaction_fatigue;
 
     @NotNull
-    private String reaction_vomiting;
+    private TrackerDataValue reaction_vomiting;
 
     @NotNull
-    private String reaction_injection_site_soreness;
+    private TrackerDataValue reaction_injection_site_soreness;
 
     @NotNull
-    private String reaction_injection_site_tenderness;
+    private TrackerDataValue reaction_injection_site_tenderness;
 
     @NotNull
-    private String reaction_skin_rash;
+    private TrackerDataValue reaction_skin_rash;
 
     @NotNull
-    private String reaction_itchingh;
+    private TrackerDataValue reaction_itchingh;
 
     @NotNull
-    private String reaction_muscle_pain;
+    private TrackerDataValue reaction_muscle_pain;
 
     @NotNull
-    private String reaction_persistent_crying;
+    private TrackerDataValue reaction_persistent_crying;
 
     @NotNull
-    private String reaction_poor_breast_feeding;
+    private TrackerDataValue reaction_poor_breast_feeding;
 
     @NotNull
-    private String reaction_loss_of_apetite;
+    private TrackerDataValue reaction_loss_of_apetite;
 
     @NotNull
-    private String reaction_chills;
+    private TrackerDataValue reaction_chills;
 
     @NotNull
-    private String reaction_fainting;
+    private TrackerDataValue reaction_fainting;
 
     @NotNull
-    private String reaction_mild_fever;
+    private TrackerDataValue reaction_mild_fever;
 
     @NotNull
-    private String reaction_tiredness;
+    private TrackerDataValue reaction_tiredness;
 
     @NotNull
-    private String reaction_nasal_congestion;
+    private TrackerDataValue reaction_nasal_congestion;
 
     @NotNull
-    private String reaction_lymph_node_enlargement;
+    private TrackerDataValue reaction_lymph_node_enlargement;
 
     @NotNull
-    private String reaction_dizziness;
+    private TrackerDataValue reaction_dizziness;
 
     @NotNull
-    private String reaction_drowsiness;
+    private TrackerDataValue reaction_drowsiness;
 
     @NotNull
-    private String reaction_other;
+    private TrackerDataValue reaction_other;
 }

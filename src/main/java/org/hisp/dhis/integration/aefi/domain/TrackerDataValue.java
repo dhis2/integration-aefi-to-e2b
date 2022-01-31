@@ -25,33 +25,30 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi.config.properties;
+package org.hisp.dhis.integration.aefi.domain;
 
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
-import org.hisp.dhis.integration.aefi.domain.TrackerDataValue;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 @Data
-@Component
 @Validated
-@ConfigurationProperties( prefix = "aefi-to-e2b.dhis2" )
-public class Dhis2Properties
+public class TrackerDataValue
 {
     @NotNull
-    private String baseUrl;
+    private String id;
+
+    /**
+     * TODO Currently not in use
+     */
+    @NotNull
+    private boolean required = true;
 
     @NotNull
-    private String username;
+    private boolean attribute = true;
 
     @NotNull
-    private String password;
-
-    private TrackerDataValue trackerDataValue;
-
-    private AefiMappingProperties mapping = new AefiMappingProperties();
+    private boolean dataElement = true;
 }
