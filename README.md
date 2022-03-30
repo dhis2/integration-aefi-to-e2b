@@ -1,5 +1,7 @@
 # AEFI to E2B DHIS2 Facade
 
+![Build Status](https://github.com/smooks/smooks/workflows/CI/badge.svg)
+
 **Requirements**: JDK 11, Maven 3
 
 ## Quickstart
