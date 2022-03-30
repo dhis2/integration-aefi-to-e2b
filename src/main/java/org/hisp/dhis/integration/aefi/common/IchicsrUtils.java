@@ -27,16 +27,7 @@
  */
 package org.hisp.dhis.integration.aefi.common;
 
-import static org.springframework.util.StringUtils.hasText;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import lombok.Data;
-
 import org.hisp.dhis.integration.aefi.config.properties.AefiMappingProperties;
 import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
 import org.hisp.dhis.integration.aefi.domain.TrackerDataValue;
@@ -115,6 +106,14 @@ import org.hisp.dhis.integration.aefi.domain.tracker.Enrollment;
 import org.hisp.dhis.integration.aefi.domain.tracker.Event;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityAttribute;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.springframework.util.StringUtils.hasText;
 
 public final class IchicsrUtils
 {
@@ -416,7 +415,16 @@ public final class IchicsrUtils
         drug.setDrugcharacterization( drugcharacterization );
 
         Medicinalproduct medicinalproduct = new Medicinalproduct();
-        medicinalproduct.setvalue( vaccine_name + " " + vaccine_brand );
+
+        if ( hasText( vaccine_brand ) )
+        {
+            medicinalproduct.setvalue( vaccine_name + " " + vaccine_brand );
+        }
+        else
+        {
+            medicinalproduct.setvalue( vaccine_name );
+        }
+
         drug.setMedicinalproduct( medicinalproduct );
 
         Drugbatchnumb drugbatchnumb = new Drugbatchnumb();
@@ -534,12 +542,12 @@ public final class IchicsrUtils
             {
                 switch ( seizureType )
                 {
-                case "AFEBRILE":
-                    reactions.add( createReaction( aefiProperties, te, "Seizure afebrile", "10001436" ) );
-                    break;
-                case "FEBRILE":
-                    reactions.add( createReaction( aefiProperties, te, "Seizure febrile", "10016290" ) );
-                    break;
+                    case "AFEBRILE":
+                        reactions.add( createReaction( aefiProperties, te, "Seizure afebrile", "10001436" ) );
+                        break;
+                    case "FEBRILE":
+                        reactions.add( createReaction( aefiProperties, te, "Seizure febrile", "10016290" ) );
+                        break;
                 }
             }
             else
@@ -915,19 +923,19 @@ public final class IchicsrUtils
 
         switch ( value )
         {
-        case "Recovered/resolved":
-            return "1";
-        case "Recovering/resolving":
-            return "2";
-        case "Not recovered/not resolved":
-            return "3";
-        case "Recovered/resolved with sequelae":
-            return "4";
-        case "Died":
-        case "DiedAutopsy done":
-            return "5";
-        case "Unknown":
-            return "6";
+            case "Recovered/resolved":
+                return "1";
+            case "Recovering/resolving":
+                return "2";
+            case "Not recovered/not resolved":
+                return "3";
+            case "Recovered/resolved with sequelae":
+                return "4";
+            case "Died":
+            case "DiedAutopsy done":
+                return "5";
+            case "Unknown":
+                return "6";
         }
 
         return value;
@@ -944,10 +952,10 @@ public final class IchicsrUtils
 
         switch ( gender )
         {
-        case "MALE":
-            return "1";
-        case "FEMALE":
-            return "2";
+            case "MALE":
+                return "1";
+            case "FEMALE":
+                return "2";
         }
 
         return "";
