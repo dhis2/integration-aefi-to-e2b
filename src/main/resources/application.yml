@@ -1,6 +1,10 @@
 server:
   port: 8080
   address: 127.0.0.1
+spring:
+  cache:
+    caffeine:
+      spec: initialCapacity=200
 aefi-to-e2b:
   dhis2:
     mapping:
