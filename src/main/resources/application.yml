@@ -5,9 +5,6 @@ spring:
   cache:
     caffeine:
       spec: initialCapacity=200
-logging:
-  level:
-    org.hisp.dhis.integration.aefi.service: DEBUG
 aefi-to-e2b:
   dhis2:
     mapping:

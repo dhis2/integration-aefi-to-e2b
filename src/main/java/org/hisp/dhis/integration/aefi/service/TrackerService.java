@@ -27,8 +27,11 @@
  */
 package org.hisp.dhis.integration.aefi.service;
 
+import java.net.URI;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
@@ -37,8 +40,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
 
 @Slf4j
 @Service
@@ -96,6 +97,8 @@ public class TrackerService
                 .path( "/api/trackedEntityInstances" )
                 .queryParam( "program", dhis2Properties.getMapping().getProgram() )
                 .queryParam( "fields", "*" )
+                .queryParam( "ouMode", "ACCESSIBLE" )
+                .queryParam( "skipPaging", "true" )
                 .queryParam( "lastUpdatedStartDate", params.getLastUpdated() )
                 .build()
                 .encode();

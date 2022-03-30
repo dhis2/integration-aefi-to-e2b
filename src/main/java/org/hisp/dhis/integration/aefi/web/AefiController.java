@@ -27,7 +27,11 @@
  */
 package org.hisp.dhis.integration.aefi.web;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
@@ -42,9 +46,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
