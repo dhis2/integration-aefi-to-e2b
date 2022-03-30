@@ -115,8 +115,8 @@ import org.hisp.dhis.integration.aefi.domain.icsr21.Transmissiondateformat;
 import org.hisp.dhis.integration.aefi.domain.tracker.DataValue;
 import org.hisp.dhis.integration.aefi.domain.tracker.Enrollment;
 import org.hisp.dhis.integration.aefi.domain.tracker.Event;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityAttribute;
-import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
 
 public final class IchicsrUtils
 {
@@ -169,9 +169,9 @@ public final class IchicsrUtils
     }
 
     public static Safetyreport createSafetyreport( AefiProperties aefiProperties,
-        TrackedEntityInstance trackedEntityInstance, Function<String, OrganisationUnit> orgUnitResolver )
+        TrackedEntity trackedEntity, Function<String, OrganisationUnit> orgUnitResolver )
     {
-        MappedTrackedEntityInstance te = createMappedTrackedEntityInstance( trackedEntityInstance );
+        MappedTrackedEntityInstance te = createMappedTrackedEntityInstance( trackedEntity );
 
         Safetyreport safetyreport = new Safetyreport();
 
@@ -884,18 +884,18 @@ public final class IchicsrUtils
     }
 
     private static MappedTrackedEntityInstance createMappedTrackedEntityInstance(
-        TrackedEntityInstance trackedEntityInstance )
+        TrackedEntity trackedEntity )
     {
         MappedTrackedEntityInstance te = new MappedTrackedEntityInstance();
 
-        for ( TrackedEntityAttribute attribute : trackedEntityInstance.getAttributes() )
+        for ( TrackedEntityAttribute attribute : trackedEntity.getAttributes() )
         {
             te.getAttributes().put( attribute.getAttribute(), attribute.getValue() );
         }
 
         // TODO this does not really properly handle multiple AEFI enrollments
         // (but that's not a concern right now)
-        for ( Enrollment enrollment : trackedEntityInstance.getEnrollments() )
+        for ( Enrollment enrollment : trackedEntity.getEnrollments() )
         {
             te.setEnrollmentDate( enrollment.getEnrollmentDate() );
             te.setIncidentDate( enrollment.getIncidentDate() );

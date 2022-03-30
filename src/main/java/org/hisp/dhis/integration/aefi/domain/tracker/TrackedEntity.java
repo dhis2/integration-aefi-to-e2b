@@ -27,13 +27,26 @@
  */
 package org.hisp.dhis.integration.aefi.domain.tracker;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Data;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 @Data
-public class TrackedEntityInstances
+@JsonRootName( "trackedEntityInstance" )
+public class TrackedEntity
 {
-    private List<TrackedEntityInstance> trackedEntityInstances = new ArrayList<>();
+    private String trackedEntityInstance;
+
+    private String trackedEntityType;
+
+    private String orgUnit;
+
+    private LocalDateTime lastUpdated;
+
+    private List<TrackedEntityAttribute> attributes;
+
+    private List<Enrollment> enrollments;
 }

@@ -32,7 +32,8 @@ import java.net.URI;
 import lombok.RequiredArgsConstructor;
 
 import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
-import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -47,20 +48,48 @@ public class TrackerService
 
     private final RestTemplate restTemplate;
 
-    public TrackedEntityInstance getFromUid( String uid )
+    public TrackedEntities search( TrackerSearchParams params )
+    {
+        return getTrackedEntities( params );
+    }
+
+    public TrackedEntity getById( String id )
     {
         UriComponents uriComponents = UriComponentsBuilder.newInstance()
             .uri( URI.create( dhis2Properties.getBaseUrl() ) )
             .path( "/api/trackedEntityInstances/" )
-            .path( uid )
+            .path( id )
             .queryParam( "program", dhis2Properties.getMapping().getProgram() )
             .queryParam( "fields", "*" )
             .build()
             .encode();
 
-        ResponseEntity<TrackedEntityInstance> response = restTemplate.getForEntity( uriComponents.toUri(),
-            TrackedEntityInstance.class );
+        ResponseEntity<TrackedEntity> response = restTemplate.getForEntity( uriComponents.toUri(),
+            TrackedEntity.class );
 
         return response.getBody();
+    }
+
+    private TrackedEntities getTrackedEntities( TrackerSearchParams params )
+    {
+        if ( !params.getTrackedEntities().isEmpty() )
+        {
+            UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .uri( URI.create( dhis2Properties.getBaseUrl() ) )
+                .path( "/api/trackedEntityInstances" )
+                .queryParam( "program", dhis2Properties.getMapping().getProgram() )
+                .queryParam( "fields", "*" )
+                .queryParam( "trackedEntityInstance", String.join( ";", params.getTrackedEntities() ) )
+                .build()
+                .encode();
+
+            ResponseEntity<TrackedEntities> response = restTemplate.getForEntity( uriComponents.toUri(),
+                TrackedEntities.class );
+
+            return response.getBody();
+
+        }
+
+        return new TrackedEntities();
     }
 }

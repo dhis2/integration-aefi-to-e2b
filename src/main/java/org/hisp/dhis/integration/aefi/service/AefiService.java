@@ -35,8 +35,8 @@ import org.hisp.dhis.integration.aefi.common.IchicsrUtils;
 import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
-import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
-import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstances;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,15 +47,15 @@ public class AefiService
 
     private final OrganisationUnitService organisationUnitService;
 
-    public Ichicsr getFromTrackedEntity( TrackedEntityInstance trackedEntityInstance )
+    public Ichicsr getFromTrackedEntity( TrackedEntity trackedEntity )
     {
-        TrackedEntityInstances trackedEntityInstances = new TrackedEntityInstances();
-        trackedEntityInstances.getTrackedEntityInstances().add( trackedEntityInstance );
+        TrackedEntities trackedEntities = new TrackedEntities();
+        trackedEntities.getTrackedEntities().add( trackedEntity );
 
-        return getFromTrackedEntities( trackedEntityInstances );
+        return getFromTrackedEntities( trackedEntities );
     }
 
-    public Ichicsr getFromTrackedEntities( TrackedEntityInstances trackedEntityInstances )
+    public Ichicsr getFromTrackedEntities( TrackedEntities trackedEntities )
     {
         Ichicsr ichicsr = IchicsrUtils.createIchicsr();
 
@@ -65,7 +65,7 @@ public class AefiService
 
         ichicsr.setIchicsrmessageheader( ichicsrmessageheader );
 
-        trackedEntityInstances.getTrackedEntityInstances().forEach( te -> ichicsr.getSafetyreport().add( IchicsrUtils
+        trackedEntities.getTrackedEntities().forEach( te -> ichicsr.getSafetyreport().add( IchicsrUtils
             .createSafetyreport( aefiProperties, te, organisationUnitService::getOrganisationUnit ) ) );
 
         return ichicsr;

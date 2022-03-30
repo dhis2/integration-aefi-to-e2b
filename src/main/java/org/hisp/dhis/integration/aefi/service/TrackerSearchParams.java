@@ -25,25 +25,27 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi.domain.tracker;
+package org.hisp.dhis.integration.aefi.service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class TrackedEntityInstance
+public class TrackerSearchParams
 {
-    private String trackedEntityInstance;
+    private List<String> trackedEntities = new ArrayList<>();
 
-    private String trackedEntityType;
+    public static TrackerSearchParams of( List<String> te )
+    {
+        TrackerSearchParams params = new TrackerSearchParams();
 
-    private String orgUnit;
+        if ( te != null )
+        {
+            params.setTrackedEntities( te );
+        }
 
-    private LocalDateTime lastUpdated;
-
-    private List<TrackedEntityAttribute> attributes;
-
-    private List<Enrollment> enrollments;
+        return params;
+    }
 }

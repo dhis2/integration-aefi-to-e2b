@@ -27,17 +27,22 @@
  */
 package org.hisp.dhis.integration.aefi.web;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
-import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
+import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
 import org.hisp.dhis.integration.aefi.service.AefiService;
+import org.hisp.dhis.integration.aefi.service.TrackerSearchParams;
 import org.hisp.dhis.integration.aefi.service.TrackerService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -52,8 +57,18 @@ public class AefiController
     @GetMapping( value = "/{uid}", produces = MediaType.APPLICATION_XML_VALUE )
     public ResponseEntity<Ichicsr> getAefiCase( @PathVariable String uid )
     {
-        TrackedEntityInstance trackedEntityInstance = trackerService.getFromUid( uid );
-        Ichicsr ichicsr = aefiService.getFromTrackedEntity( trackedEntityInstance );
+        TrackedEntity trackedEntity = trackerService.getById( uid );
+        Ichicsr ichicsr = aefiService.getFromTrackedEntity( trackedEntity );
+
+        return ResponseEntity.ok( ichicsr );
+    }
+
+    @GetMapping( value = "", produces = MediaType.APPLICATION_XML_VALUE )
+    public ResponseEntity<Ichicsr> getAefiCases( @RequestParam( required = false ) List<String> te )
+    {
+        TrackerSearchParams params = TrackerSearchParams.of( te );
+        TrackedEntities trackedEntities = trackerService.search( params );
+        Ichicsr ichicsr = aefiService.getFromTrackedEntities( trackedEntities );
 
         return ResponseEntity.ok( ichicsr );
     }
