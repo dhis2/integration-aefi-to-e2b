@@ -85,6 +85,11 @@ public class TrackerService
                 .build()
                 .encode();
 
+            if ( log.isDebugEnabled() )
+            {
+                log.debug( "Requesting: " + uriComponents.toUriString() );
+            }
+
             ResponseEntity<TrackedEntities> response = restTemplate.getForEntity( uriComponents.toUri(),
                 TrackedEntities.class );
 
