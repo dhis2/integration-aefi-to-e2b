@@ -34,11 +34,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import lombok.Data;
 
 import org.hisp.dhis.integration.aefi.config.properties.AefiMappingProperties;
 import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
+import org.hisp.dhis.integration.aefi.domain.OrganisationUnit;
 import org.hisp.dhis.integration.aefi.domain.TrackerDataValue;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Additionaldocument;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Drug;
@@ -167,7 +169,7 @@ public final class IchicsrUtils
     }
 
     public static Safetyreport createSafetyreport( AefiProperties aefiProperties,
-        TrackedEntityInstance trackedEntityInstance )
+        TrackedEntityInstance trackedEntityInstance, Function<String, OrganisationUnit> orgUnitResolver )
     {
         MappedTrackedEntityInstance te = createMappedTrackedEntityInstance( trackedEntityInstance );
 
@@ -263,7 +265,7 @@ public final class IchicsrUtils
         additionaldocument.setvalue( "2" );
         safetyreport.setAdditionaldocument( additionaldocument );
 
-        safetyreport.getPrimarysource().add( createPrimarySource( aefiProperties, te ) );
+        safetyreport.getPrimarysource().add( createPrimarySource( aefiProperties, te, orgUnitResolver ) );
         safetyreport.setSender( createSender( aefiProperties, te ) );
         safetyreport.setReceiver( createReceiver( aefiProperties, te ) );
         safetyreport.setPatient( createPatient( aefiProperties, te ) );
@@ -821,7 +823,8 @@ public final class IchicsrUtils
         return medicalhistoryepisode;
     }
 
-    private static Primarysource createPrimarySource( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
+    private static Primarysource createPrimarySource( AefiProperties aefiProperties, MappedTrackedEntityInstance te,
+        Function<String, OrganisationUnit> orgUnitResolver )
     {
         Primarysource primarysource = new Primarysource();
 
@@ -837,8 +840,10 @@ public final class IchicsrUtils
         primarysource.setReportergivename( reportergivename );
 
         Reporterorganization reporterorganization = new Reporterorganization();
-        reporterorganization
-            .setvalue( te.getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReporter_organization() ) );
+        String reporterorganizationOrgUnit = te
+            .getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReporter_organization() );
+
+        reporterorganization.setvalue( orgUnitResolver.apply( reporterorganizationOrgUnit ).getName() );
         primarysource.setReporterorganization( reporterorganization );
 
         Qualification qualification = new Qualification();

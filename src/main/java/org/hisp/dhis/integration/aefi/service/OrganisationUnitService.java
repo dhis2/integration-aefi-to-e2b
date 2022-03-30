@@ -27,47 +27,43 @@
  */
 package org.hisp.dhis.integration.aefi.service;
 
-import java.util.UUID;
+import java.net.URI;
 
 import lombok.RequiredArgsConstructor;
 
-import org.hisp.dhis.integration.aefi.common.IchicsrUtils;
-import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
-import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
-import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
-import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
-import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstances;
+import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
+import org.hisp.dhis.integration.aefi.domain.OrganisationUnit;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
-public class AefiService
+@CacheConfig( cacheNames = { "orgUnit" } )
+public class OrganisationUnitService
 {
-    private final AefiProperties aefiProperties;
+    private final Dhis2Properties dhis2Properties;
 
-    private final OrganisationUnitService organisationUnitService;
+    private final RestTemplate restTemplate;
 
-    public Ichicsr getFromTrackedEntity( TrackedEntityInstance trackedEntityInstance )
+    @Cacheable( "orgUnit" )
+    public OrganisationUnit getOrganisationUnit( String id )
     {
-        TrackedEntityInstances trackedEntityInstances = new TrackedEntityInstances();
-        trackedEntityInstances.getTrackedEntityInstances().add( trackedEntityInstance );
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+            .uri( URI.create( dhis2Properties.getBaseUrl() ) )
+            .path( "/api/organisationUnits/" )
+            .path( id )
+            .queryParam( "fields", "id,displayName~rename(name)" )
+            .build()
+            .encode();
 
-        return getFromTrackedEntities( trackedEntityInstances );
-    }
+        ResponseEntity<OrganisationUnit> response = restTemplate.getForEntity( uriComponents.toUri(),
+            OrganisationUnit.class );
 
-    public Ichicsr getFromTrackedEntities( TrackedEntityInstances trackedEntityInstances )
-    {
-        Ichicsr ichicsr = IchicsrUtils.createIchicsr();
-
-        Ichicsrmessageheader ichicsrmessageheader = IchicsrUtils.createIchicsrmessageheader(
-            UUID.randomUUID().toString(), aefiProperties.getE2b().getSenderId(),
-            aefiProperties.getE2b().getReceiverId() );
-
-        ichicsr.setIchicsrmessageheader( ichicsrmessageheader );
-
-        trackedEntityInstances.getTrackedEntityInstances().forEach( te -> ichicsr.getSafetyreport().add( IchicsrUtils
-            .createSafetyreport( aefiProperties, te, organisationUnitService::getOrganisationUnit ) ) );
-
-        return ichicsr;
+        return response.getBody();
     }
 }

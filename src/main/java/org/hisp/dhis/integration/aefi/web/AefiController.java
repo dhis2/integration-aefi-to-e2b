@@ -27,6 +27,8 @@
  */
 package org.hisp.dhis.integration.aefi.web;
 
+import lombok.RequiredArgsConstructor;
+
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
 import org.hisp.dhis.integration.aefi.service.AefiService;
@@ -39,18 +41,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping( "/api/aefi-to-e2b" )
 public class AefiController
 {
     private final TrackerService trackerService;
 
     private final AefiService aefiService;
-
-    public AefiController( TrackerService trackerService, AefiService aefiService )
-    {
-        this.trackerService = trackerService;
-        this.aefiService = aefiService;
-    }
 
     @GetMapping( value = "/{uid}", produces = MediaType.APPLICATION_XML_VALUE )
     public ResponseEntity<Ichicsr> getAefiCase( @PathVariable String uid )

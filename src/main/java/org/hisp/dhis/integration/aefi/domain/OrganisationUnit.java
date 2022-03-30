@@ -25,42 +25,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi.service;
+package org.hisp.dhis.integration.aefi.domain;
 
-import java.net.URI;
+import javax.validation.constraints.NotEmpty;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
 
-import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
-import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntityInstance;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
-
-@Service
-@RequiredArgsConstructor
-public class TrackerService
+@Data
+public class OrganisationUnit
 {
-    private final Dhis2Properties dhis2Properties;
+    @NotEmpty
+    private String id;
 
-    private final RestTemplate restTemplate;
-
-    public TrackedEntityInstance getFromUid( String uid )
-    {
-        UriComponents uriComponents = UriComponentsBuilder.newInstance()
-            .uri( URI.create( dhis2Properties.getBaseUrl() ) )
-            .path( "/api/trackedEntityInstances/" )
-            .path( uid )
-            .queryParam( "program", dhis2Properties.getMapping().getProgram() )
-            .queryParam( "fields", "*" )
-            .build()
-            .encode();
-
-        ResponseEntity<TrackedEntityInstance> response = restTemplate.getForEntity( uriComponents.toUri(),
-            TrackedEntityInstance.class );
-
-        return response.getBody();
-    }
+    @NotEmpty
+    private String name;
 }

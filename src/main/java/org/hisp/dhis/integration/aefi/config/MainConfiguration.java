@@ -36,6 +36,7 @@ import javax.xml.bind.Marshaller;
 import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -44,6 +45,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
+@EnableCaching
 @EnableConfigurationProperties
 public class MainConfiguration
 {
@@ -85,11 +87,11 @@ public class MainConfiguration
     public RestTemplate restTemplate()
     {
         // TODO replace with WebClient (RestTemplate will be deprecated)
-        return new RestTemplateBuilder()
-            .defaultMessageConverters()
+        return new RestTemplateBuilder().defaultMessageConverters()
             .defaultHeader( "Content-Type", MediaType.APPLICATION_JSON_VALUE )
             .defaultHeader( "Accept", MediaType.APPLICATION_JSON_VALUE )
-            .basicAuthentication( dhis2Properties.getUsername(), dhis2Properties.getPassword(), StandardCharsets.UTF_8 )
+            .basicAuthentication( dhis2Properties.getUsername(),
+                dhis2Properties.getPassword(), StandardCharsets.UTF_8 )
             .build();
     }
 }
