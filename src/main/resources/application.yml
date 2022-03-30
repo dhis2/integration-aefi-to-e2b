@@ -4,7 +4,7 @@ server:
 spring:
   cache:
     caffeine:
-      spec: initialCapacity=200
+      spec: initialCapacity=200,expireAfterWrite=10m
 aefi-to-e2b:
   dhis2:
     mapping:
