@@ -27,10 +27,8 @@
  */
 package org.hisp.dhis.integration.aefi.service;
 
-import java.net.URI;
-
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
@@ -40,6 +38,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TrackerService
@@ -87,7 +88,27 @@ public class TrackerService
                 TrackedEntities.class );
 
             return response.getBody();
+        }
+        else if ( params.getLastUpdated() != null )
+        {
+            UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .uri( URI.create( dhis2Properties.getBaseUrl() ) )
+                .path( "/api/trackedEntityInstances" )
+                .queryParam( "program", dhis2Properties.getMapping().getProgram() )
+                .queryParam( "fields", "*" )
+                .queryParam( "lastUpdatedStartDate", params.getLastUpdated() )
+                .build()
+                .encode();
 
+            if ( log.isDebugEnabled() )
+            {
+                log.debug( "Requesting: " + uriComponents.toUriString() );
+            }
+
+            ResponseEntity<TrackedEntities> response = restTemplate.getForEntity( uriComponents.toUri(),
+                TrackedEntities.class );
+
+            return response.getBody();
         }
 
         return new TrackedEntities();

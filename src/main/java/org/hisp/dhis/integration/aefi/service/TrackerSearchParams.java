@@ -27,23 +27,31 @@
  */
 package org.hisp.dhis.integration.aefi.service;
 
+import lombok.Data;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Data;
 
 @Data
 public class TrackerSearchParams
 {
     private List<String> trackedEntities = new ArrayList<>();
 
-    public static TrackerSearchParams of( List<String> te )
+    private LocalDate lastUpdated;
+
+    public static TrackerSearchParams of( List<String> te, LocalDate lastUpdated )
     {
         TrackerSearchParams params = new TrackerSearchParams();
 
         if ( te != null )
         {
             params.setTrackedEntities( te );
+        }
+
+        if ( lastUpdated != null )
+        {
+            params.setLastUpdated( lastUpdated );
         }
 
         return params;
