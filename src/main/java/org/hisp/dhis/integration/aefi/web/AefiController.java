@@ -27,6 +27,7 @@
  */
 package org.hisp.dhis.integration.aefi.web;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
 import org.hisp.dhis.integration.aefi.service.AefiService;
 import org.hisp.dhis.integration.aefi.service.TrackerSearchParams;
 import org.hisp.dhis.integration.aefi.service.TrackerService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,10 +65,13 @@ public class AefiController
         return ResponseEntity.ok( ichicsr );
     }
 
+    // TODO: WIP, does not currently work
     @GetMapping( value = "", produces = MediaType.APPLICATION_XML_VALUE )
-    public ResponseEntity<Ichicsr> getAefiCases( @RequestParam( required = false ) List<String> te )
+    public ResponseEntity<Ichicsr> getAefiCases(
+        @RequestParam( required = false ) List<String> te,
+        @RequestParam( required = false ) @DateTimeFormat( pattern = "yyyy-MM-dd" ) LocalDate lastUpdated )
     {
-        TrackerSearchParams params = TrackerSearchParams.of( te );
+        TrackerSearchParams params = TrackerSearchParams.of( te, lastUpdated );
         TrackedEntities trackedEntities = trackerService.search( params );
         Ichicsr ichicsr = aefiService.getFromTrackedEntities( trackedEntities );
 
