@@ -168,8 +168,8 @@ public final class IchicsrUtils
         return ichicsrmessageheader;
     }
 
-    public static Safetyreport createSafetyreport( AefiProperties aefiProperties,
-        TrackedEntity trackedEntity, Function<String, OrganisationUnit> orgUnitResolver )
+    public static Safetyreport createSafetyreport( AefiProperties aefiProperties, TrackedEntity trackedEntity,
+        Function<String, OrganisationUnit> orgUnitResolver )
     {
         MappedTrackedEntityInstance te = createMappedTrackedEntityInstance( trackedEntity );
 
@@ -268,17 +268,27 @@ public final class IchicsrUtils
         safetyreport.getPrimarysource().add( createPrimarySource( aefiProperties, te, orgUnitResolver ) );
         safetyreport.setSender( createSender( aefiProperties, te ) );
         safetyreport.setReceiver( createReceiver( aefiProperties, te ) );
-        safetyreport.setPatient( createPatient( aefiProperties, te ) );
+        safetyreport.setPatient( createPatient( aefiProperties, te, aefiProperties.isAnonymous() ) );
 
         return safetyreport;
     }
 
-    private static Patient createPatient( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
+    private static Patient createPatient( AefiProperties aefiProperties, MappedTrackedEntityInstance te,
+        boolean anonymous )
     {
         Patient patient = new Patient();
 
         Patientinitial patientinitial = new Patientinitial();
-        patientinitial.setvalue( getPatientName( aefiProperties, te ) );
+
+        if ( !anonymous )
+        {
+            patientinitial.setvalue( getPatientName( aefiProperties, te ) );
+        }
+        else
+        {
+            patientinitial.setvalue( "ANON" );
+        }
+
         patient.setPatientinitial( patientinitial );
 
         Patientbirthdateformat patientbirthdateformat = new Patientbirthdateformat();
@@ -360,44 +370,44 @@ public final class IchicsrUtils
         AefiMappingProperties mapping = aefiProperties.getDhis2().getMapping();
 
         createDrug( drugs, te.getTrackerDataValue( mapping.getVaccine1_name() ),
-            te.getTrackerDataValue( mapping.getVaccine1_brand() ),
-            te.getTrackerDataValue( mapping.getVaccine1_date() ), te.getTrackerDataValue( mapping.getVaccine1_time() ),
+            te.getTrackerDataValue( mapping.getVaccine1_brand() ), te.getTrackerDataValue( mapping.getVaccine1_date() ),
+            te.getTrackerDataValue( mapping.getVaccine1_time() ),
             te.getTrackerDataValue( mapping.getVaccine1_batch() ), te.getTrackerDataValue( mapping.getVaccine1_dose() ),
             te.getTrackerDataValue( mapping.getVaccine1_expiry() ),
             te.getTrackerDataValue( mapping.getDiluent1_name() ),
             te.getTrackerDataValue( mapping.getDiluent1_batch() ),
-            te.getTrackerDataValue( mapping.getDiluent1_expiry() ),
-            te.getTrackerDataValue( mapping.getDiluent1_dor() ), te.getTrackerDataValue( mapping.getDiluent1_tor() ) );
+            te.getTrackerDataValue( mapping.getDiluent1_expiry() ), te.getTrackerDataValue( mapping.getDiluent1_dor() ),
+            te.getTrackerDataValue( mapping.getDiluent1_tor() ) );
 
         createDrug( drugs, te.getTrackerDataValue( mapping.getVaccine2_name() ),
-            te.getTrackerDataValue( mapping.getVaccine2_brand() ),
-            te.getTrackerDataValue( mapping.getVaccine2_date() ), te.getTrackerDataValue( mapping.getVaccine2_time() ),
+            te.getTrackerDataValue( mapping.getVaccine2_brand() ), te.getTrackerDataValue( mapping.getVaccine2_date() ),
+            te.getTrackerDataValue( mapping.getVaccine2_time() ),
             te.getTrackerDataValue( mapping.getVaccine2_batch() ), te.getTrackerDataValue( mapping.getVaccine2_dose() ),
             te.getTrackerDataValue( mapping.getVaccine2_expiry() ),
             te.getTrackerDataValue( mapping.getDiluent2_name() ),
             te.getTrackerDataValue( mapping.getDiluent2_batch() ),
-            te.getTrackerDataValue( mapping.getDiluent2_expiry() ),
-            te.getTrackerDataValue( mapping.getDiluent2_dor() ), te.getTrackerDataValue( mapping.getDiluent2_tor() ) );
+            te.getTrackerDataValue( mapping.getDiluent2_expiry() ), te.getTrackerDataValue( mapping.getDiluent2_dor() ),
+            te.getTrackerDataValue( mapping.getDiluent2_tor() ) );
 
         createDrug( drugs, te.getTrackerDataValue( mapping.getVaccine3_name() ),
-            te.getTrackerDataValue( mapping.getVaccine3_brand() ),
-            te.getTrackerDataValue( mapping.getVaccine3_date() ), te.getTrackerDataValue( mapping.getVaccine3_time() ),
+            te.getTrackerDataValue( mapping.getVaccine3_brand() ), te.getTrackerDataValue( mapping.getVaccine3_date() ),
+            te.getTrackerDataValue( mapping.getVaccine3_time() ),
             te.getTrackerDataValue( mapping.getVaccine3_batch() ), te.getTrackerDataValue( mapping.getVaccine3_dose() ),
             te.getTrackerDataValue( mapping.getVaccine3_expiry() ),
             te.getTrackerDataValue( mapping.getDiluent3_name() ),
             te.getTrackerDataValue( mapping.getDiluent3_batch() ),
-            te.getTrackerDataValue( mapping.getDiluent3_expiry() ),
-            te.getTrackerDataValue( mapping.getDiluent3_dor() ), te.getTrackerDataValue( mapping.getDiluent3_tor() ) );
+            te.getTrackerDataValue( mapping.getDiluent3_expiry() ), te.getTrackerDataValue( mapping.getDiluent3_dor() ),
+            te.getTrackerDataValue( mapping.getDiluent3_tor() ) );
 
         createDrug( drugs, te.getTrackerDataValue( mapping.getVaccine4_name() ),
-            te.getTrackerDataValue( mapping.getVaccine4_brand() ),
-            te.getTrackerDataValue( mapping.getVaccine4_date() ), te.getTrackerDataValue( mapping.getVaccine4_time() ),
+            te.getTrackerDataValue( mapping.getVaccine4_brand() ), te.getTrackerDataValue( mapping.getVaccine4_date() ),
+            te.getTrackerDataValue( mapping.getVaccine4_time() ),
             te.getTrackerDataValue( mapping.getVaccine4_batch() ), te.getTrackerDataValue( mapping.getVaccine4_dose() ),
             te.getTrackerDataValue( mapping.getVaccine4_expiry() ),
             te.getTrackerDataValue( mapping.getDiluent4_name() ),
             te.getTrackerDataValue( mapping.getDiluent4_batch() ),
-            te.getTrackerDataValue( mapping.getDiluent4_expiry() ),
-            te.getTrackerDataValue( mapping.getDiluent4_dor() ), te.getTrackerDataValue( mapping.getDiluent4_tor() ) );
+            te.getTrackerDataValue( mapping.getDiluent4_expiry() ), te.getTrackerDataValue( mapping.getDiluent4_dor() ),
+            te.getTrackerDataValue( mapping.getDiluent4_tor() ) );
 
         return drugs;
     }
@@ -883,8 +893,7 @@ public final class IchicsrUtils
         return sender;
     }
 
-    private static MappedTrackedEntityInstance createMappedTrackedEntityInstance(
-        TrackedEntity trackedEntity )
+    private static MappedTrackedEntityInstance createMappedTrackedEntityInstance( TrackedEntity trackedEntity )
     {
         MappedTrackedEntityInstance te = new MappedTrackedEntityInstance();
 

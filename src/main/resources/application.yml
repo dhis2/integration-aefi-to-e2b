@@ -6,6 +6,7 @@ spring:
     caffeine:
       spec: initialCapacity=200,expireAfterWrite=10m
 aefi-to-e2b:
+  anonymous: true
   dhis2:
     mapping:
       program: EZkN8vYZwjR
