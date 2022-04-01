@@ -268,19 +268,18 @@ public final class IchicsrUtils
         safetyreport.getPrimarysource().add( createPrimarySource( aefiProperties, te, orgUnitResolver ) );
         safetyreport.setSender( createSender( aefiProperties, te ) );
         safetyreport.setReceiver( createReceiver( aefiProperties, te ) );
-        safetyreport.setPatient( createPatient( aefiProperties, te, aefiProperties.isAnonymous() ) );
+        safetyreport.setPatient( createPatient( aefiProperties, te ) );
 
         return safetyreport;
     }
 
-    private static Patient createPatient( AefiProperties aefiProperties, MappedTrackedEntityInstance te,
-        boolean anonymous )
+    private static Patient createPatient( AefiProperties aefiProperties, MappedTrackedEntityInstance te )
     {
         Patient patient = new Patient();
 
         Patientinitial patientinitial = new Patientinitial();
 
-        if ( !anonymous )
+        if ( !aefiProperties.isAnonymous() )
         {
             patientinitial.setvalue( getPatientName( aefiProperties, te ) );
         }
