@@ -854,8 +854,7 @@ public final class IchicsrUtils
 
         if ( !hasText( reporterorganizationOrgUnit ) )
         {
-            // if not report org unit was given, fall back to enrollment org
-            // unit
+            // if not report orgUnit was given, fall back to enrollment orgUnit
             reporterorganizationOrgUnit = te.getOrgUnit();
         }
 
