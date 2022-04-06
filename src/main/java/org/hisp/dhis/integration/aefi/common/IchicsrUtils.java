@@ -852,6 +852,13 @@ public final class IchicsrUtils
         String reporterorganizationOrgUnit = te
             .getTrackerDataValue( aefiProperties.getDhis2().getMapping().getReporter_organization() );
 
+        if ( !hasText( reporterorganizationOrgUnit ) )
+        {
+            // if not report org unit was given, fall back to enrollment org
+            // unit
+            reporterorganizationOrgUnit = te.getOrgUnit();
+        }
+
         reporterorganization.setvalue( orgUnitResolver.apply( reporterorganizationOrgUnit ).getName() );
         primarysource.setReporterorganization( reporterorganization );
 
