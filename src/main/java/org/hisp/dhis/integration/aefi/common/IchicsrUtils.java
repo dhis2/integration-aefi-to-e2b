@@ -862,7 +862,7 @@ public final class IchicsrUtils
         primarysource.setReporterorganization( reporterorganization );
 
         Qualification qualification = new Qualification();
-        qualification.setvalue( reporterName.startsWith( "DR " ) ? "1" : "3" );
+        qualification.setvalue( reporterName.toUpperCase().startsWith( "DR " ) ? "1" : "3" );
         primarysource.setQualification( qualification );
 
         return primarysource;
