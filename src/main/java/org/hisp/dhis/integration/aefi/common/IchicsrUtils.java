@@ -972,8 +972,10 @@ public final class IchicsrUtils
 
         switch ( gender )
         {
+        case "M":
         case "MALE":
             return "1";
+        case "F":
         case "FEMALE":
             return "2";
         }
