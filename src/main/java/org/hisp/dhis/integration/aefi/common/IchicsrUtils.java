@@ -320,7 +320,7 @@ public final class IchicsrUtils
 
             if ( hasText( deathDate ) )
             {
-                LocalDateTime dateTime = LocalDateTime.parse( deathDate + "T00:00:00" );
+                LocalDateTime dateTime = DateUtils.getLocalDateTime( deathDate );
 
                 Patientdeathdateformat patientdeathdateformat = new Patientdeathdateformat();
                 patientdeathdateformat.setvalue( "102" );
@@ -1019,7 +1019,7 @@ public final class IchicsrUtils
 
         if ( hasText( birthdate ) )
         {
-            return DateUtils.dateFormat102( LocalDateTime.parse( birthdate + "T00:00:00" ) );
+            return DateUtils.dateFormat102( DateUtils.getLocalDateTime( birthdate ) );
         }
 
         return null;

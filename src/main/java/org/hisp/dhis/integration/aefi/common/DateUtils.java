@@ -27,6 +27,8 @@
  */
 package org.hisp.dhis.integration.aefi.common;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -64,5 +66,15 @@ public final class DateUtils
 
     private DateUtils()
     {
+    }
+
+    public static LocalDateTime getLocalDateTime( String dt )
+    {
+        if ( !hasText( dt ) )
+        {
+            return LocalDateTime.now();
+        }
+
+        return dt.contains( "T" ) ? LocalDateTime.parse( dt ) : LocalDateTime.parse( dt + "T00:00:00" );
     }
 }
