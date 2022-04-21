@@ -65,7 +65,6 @@ public class AefiController
         return ResponseEntity.ok( ichicsr );
     }
 
-    // TODO: WIP, does not currently work
     @GetMapping( value = "", produces = MediaType.APPLICATION_XML_VALUE )
     public ResponseEntity<Ichicsr> getAefiCases(
         @RequestParam( required = false ) List<String> te,
