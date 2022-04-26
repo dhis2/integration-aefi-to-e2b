@@ -49,7 +49,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping( "/api/aefi-to-e2b" )
+@RequestMapping( "${aefi-to-e2b.api-endpoint}" )
 public class AefiController
 {
     private final TrackerService trackerService;

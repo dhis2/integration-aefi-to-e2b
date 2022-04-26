@@ -39,6 +39,8 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties( prefix = "aefi-to-e2b" )
 public class AefiProperties
 {
+    private String apiEndpoint;
+
     private boolean anonymous;
 
     private Dhis2Properties dhis2 = new Dhis2Properties();
