@@ -23,6 +23,7 @@
     <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
     <speedy-spotless-maven-plugin.version>0.1.3</speedy-spotless-maven-plugin.version>
     <java.version>11</java.version>
+    <camel.version>3.16.0</camel.version>
   </properties>
 
   <dependencies>
@@ -69,6 +70,18 @@
       <artifactId>jaxb-impl</artifactId>
       <version>2.3.3</version>
       <scope>runtime</scope>
+    </dependency>
+
+    <!-- Apache Camel -->
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-spring-boot-starter</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-mail-starter</artifactId>
+      <version>${camel.version}</version>
     </dependency>
 
     <dependency>

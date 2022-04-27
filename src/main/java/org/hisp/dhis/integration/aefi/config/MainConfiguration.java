@@ -77,8 +77,8 @@ public class MainConfiguration
         properties.put( Marshaller.JAXB_FORMATTED_OUTPUT, true );
         properties.put( Marshaller.JAXB_FRAGMENT, true );
         properties.put( "com.sun.xml.bind.xmlHeaders",
-            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"+
-            "\n<!DOCTYPE ichicsr SYSTEM \"http://eudravigilance.ema.europa.eu/dtd/icsr21xml.dtd\">" );
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
+                "\n<!DOCTYPE ichicsr SYSTEM \"http://eudravigilance.ema.europa.eu/dtd/icsr21xml.dtd\">" );
 
         marshaller.setMarshallerProperties( properties );
 
