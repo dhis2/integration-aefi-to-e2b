@@ -37,8 +37,6 @@ import java.util.Map;
 
 import javax.xml.bind.Marshaller;
 
-import lombok.SneakyThrows;
-
 import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -120,7 +118,6 @@ class RestTemplateResponseErrorHandler implements ResponseErrorHandler
     }
 
     @Override
-    @SneakyThrows
     public void handleError( ClientHttpResponse httpResponse )
         throws IOException
     {
