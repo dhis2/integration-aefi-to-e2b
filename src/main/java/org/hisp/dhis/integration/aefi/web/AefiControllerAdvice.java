@@ -27,14 +27,18 @@
  */
 package org.hisp.dhis.integration.aefi.web;
 
+import java.net.UnknownHostException;
+
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 @ControllerAdvice
@@ -46,6 +50,15 @@ public class AefiControllerAdvice
     {
         response.setStatus( ex.getRawStatusCode() );
         return new WebMessage( ex.getStatusCode().value(), ex.getStatusCode().getReasonPhrase() );
+    }
+
+    @ResponseBody
+    @ResponseStatus( HttpStatus.BAD_GATEWAY )
+    @ExceptionHandler( UnknownHostException.class )
+    public WebMessage unknownHostException( UnknownHostException ex )
+    {
+        return new WebMessage( HttpStatus.BAD_GATEWAY.value(),
+            "Unknown host '" + ex.getMessage() + "', please check your configuration." );
     }
 }
 
