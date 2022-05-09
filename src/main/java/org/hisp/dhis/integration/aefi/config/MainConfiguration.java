@@ -27,11 +27,17 @@
  */
 package org.hisp.dhis.integration.aefi.config;
 
+import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
+import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
+
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.Marshaller;
+
+import lombok.SneakyThrows;
 
 import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -39,9 +45,13 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -92,8 +102,40 @@ public class MainConfiguration
         return new RestTemplateBuilder().defaultMessageConverters()
             .defaultHeader( "Content-Type", MediaType.APPLICATION_JSON_VALUE )
             .defaultHeader( "Accept", MediaType.APPLICATION_JSON_VALUE )
+            .errorHandler( new RestTemplateResponseErrorHandler() )
             .basicAuthentication( dhis2Properties.getUsername(),
                 dhis2Properties.getPassword(), StandardCharsets.UTF_8 )
             .build();
+    }
+}
+
+class RestTemplateResponseErrorHandler implements ResponseErrorHandler
+{
+    @Override
+    public boolean hasError( ClientHttpResponse httpResponse )
+        throws IOException
+    {
+        return (httpResponse.getStatusCode().series() == CLIENT_ERROR
+            || httpResponse.getStatusCode().series() == SERVER_ERROR);
+    }
+
+    @Override
+    @SneakyThrows
+    public void handleError( ClientHttpResponse httpResponse )
+        throws IOException
+    {
+        if ( httpResponse.getStatusCode()
+            .series() == HttpStatus.Series.SERVER_ERROR )
+        {
+            throw new HttpClientErrorException( HttpStatus.BAD_GATEWAY );
+        }
+        else if ( httpResponse.getStatusCode()
+            .series() == HttpStatus.Series.CLIENT_ERROR )
+        {
+            if ( httpResponse.getStatusCode() == HttpStatus.NOT_FOUND )
+            {
+                throw new HttpClientErrorException( HttpStatus.NOT_FOUND );
+            }
+        }
     }
 }
