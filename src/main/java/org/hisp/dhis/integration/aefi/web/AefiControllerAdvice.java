@@ -29,7 +29,10 @@ package org.hisp.dhis.integration.aefi.web;
 
 import java.net.UnknownHostException;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -60,13 +63,25 @@ public class AefiControllerAdvice
         return new WebMessage( HttpStatus.BAD_GATEWAY.value(),
             "Unknown host '" + ex.getMessage() + "', please check your configuration." );
     }
+
+    @ResponseBody
+    @ResponseStatus( HttpStatus.BAD_GATEWAY )
+    @ExceptionHandler( MessagingException.class )
+    public WebMessage messagingException( MessagingException ex )
+    {
+        return new WebMessage( HttpStatus.BAD_GATEWAY.value(),
+            "Problem sending email '" + ex.getMessage() + "', please check your configuration." );
+    }
 }
 
 @Data
 @RequiredArgsConstructor
+@XmlRootElement( name = "webMessage" )
 class WebMessage
 {
+    @XmlElement
     private final int httpStatus;
 
+    @XmlElement
     private final String message;
 }

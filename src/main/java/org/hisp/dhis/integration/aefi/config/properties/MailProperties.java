@@ -27,6 +27,9 @@
  */
 package org.hisp.dhis.integration.aefi.config.properties;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -36,16 +39,17 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @Component
 @Validated
-@ConfigurationProperties( prefix = "aefi-to-e2b" )
-public class AefiProperties
+@ConfigurationProperties( prefix = "aefi-to-e2b.mail" )
+public class MailProperties
 {
-    private String apiEndpoint;
+    @NotNull
+    private boolean active;
 
-    private boolean anonymous;
+    @Email
+    private String to;
 
-    private MailProperties email = new MailProperties();
+    @Email
+    private String from;
 
-    private Dhis2Properties dhis2 = new Dhis2Properties();
-
-    private E2bProperties e2b = new E2bProperties();
+    private String schedule;
 }

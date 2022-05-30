@@ -37,5 +37,6 @@ public class CamelEmailRoute extends RouteBuilder
     public void configure()
         throws Exception
     {
+        // TODO will be implemented later based on MailService
     }
 }
