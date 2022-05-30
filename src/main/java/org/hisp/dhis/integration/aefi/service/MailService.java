@@ -128,17 +128,17 @@ public class MailService
     private LocalDate getLastUpdated()
     {
         Properties properties = new Properties();
-        properties.load( new FileInputStream( Main.RUNTIME_FILE ) );
-        return LocalDate.parse( properties.get( Main.PROPERTY_LAST_UPDATED ).toString() );
+        properties.load( new FileInputStream( Main.PROPERTY_FILENAME ) );
+        return LocalDate.parse( properties.get( Main.PROPERTY_MAIL_LAST_UPDATED ).toString() );
     }
 
     @SneakyThrows
     private void setLastUpdated( LocalDate lastUpdated )
     {
         Properties properties = new Properties();
-        properties.load( new FileInputStream( Main.RUNTIME_FILE ) );
-        properties.put( Main.PROPERTY_LAST_UPDATED, lastUpdated.toString() );
-        properties.store( new FileOutputStream( Main.RUNTIME_FILE ), null );
+        properties.load( new FileInputStream( Main.PROPERTY_FILENAME ) );
+        properties.put( Main.PROPERTY_MAIL_LAST_UPDATED, lastUpdated.toString() );
+        properties.store( new FileOutputStream( Main.PROPERTY_FILENAME ), null );
     }
 
     private String getAsXml( Ichicsr ichicsr )

@@ -41,10 +41,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Main implements CommandLineRunner
 {
     // File for keeping local state up to date
-    public final static String RUNTIME_FILE = "runtime.properties";
+    public final static String PROPERTY_FILENAME = "db.properties";
 
     // Key for keeping email last updated
-    public final static String PROPERTY_LAST_UPDATED = "lastUpdated";
+    public final static String PROPERTY_MAIL_LAST_UPDATED = "mail.last-updated";
 
     public static void main( String[] args )
     {
@@ -55,13 +55,13 @@ public class Main implements CommandLineRunner
     public void run( String... args )
         throws Exception
     {
-        Path path = Path.of( RUNTIME_FILE );
+        Path path = Path.of( PROPERTY_FILENAME );
 
         if ( !Files.exists( path ) )
         {
             Properties properties = new Properties();
-            properties.put( PROPERTY_LAST_UPDATED, LocalDate.of( 2022, 1, 1 ).toString() );
-            properties.store( new FileOutputStream( RUNTIME_FILE ), null );
+            properties.put( PROPERTY_MAIL_LAST_UPDATED, LocalDate.of( 2022, 1, 1 ).toString() );
+            properties.store( new FileOutputStream( PROPERTY_FILENAME ), null );
         }
     }
 }
