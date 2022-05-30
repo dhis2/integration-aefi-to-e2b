@@ -784,12 +784,16 @@ public final class IchicsrUtils
 
         if ( hasText( reactionStartDate ) )
         {
-            if ( !hasText( reactionStartTime ) )
+            if ( hasText( reactionStartTime ) )
             {
-                reactionStartTime = "00:00:00";
+                reactionStartDate = "T" + reactionStartTime;
+            }
+            else if ( !reactionStartDate.contains( "T" ) )
+            {
+                reactionStartDate = reactionStartDate + "T00:00:00";
             }
 
-            LocalDateTime dateTime = LocalDateTime.parse( reactionStartDate + "T" + reactionStartTime );
+            LocalDateTime dateTime = LocalDateTime.parse( reactionStartDate );
             reactionstartdate.setvalue( DateUtils.dateFormat203( dateTime ) );
         }
 
@@ -901,6 +905,7 @@ public final class IchicsrUtils
     private static MappedTrackedEntityInstance createMappedTrackedEntityInstance( TrackedEntity trackedEntity )
     {
         MappedTrackedEntityInstance te = new MappedTrackedEntityInstance();
+        te.setId( trackedEntity.getTrackedEntityInstance() );
 
         for ( TrackedEntityAttribute attribute : trackedEntity.getAttributes() )
         {
@@ -1033,6 +1038,8 @@ public final class IchicsrUtils
 @Data
 class MappedTrackedEntityInstance
 {
+    private String id;
+
     private LocalDateTime enrollmentDate;
 
     private LocalDateTime incidentDate;
