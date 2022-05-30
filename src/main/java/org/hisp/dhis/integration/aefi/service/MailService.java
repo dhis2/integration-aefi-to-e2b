@@ -27,6 +27,8 @@
  */
 package org.hisp.dhis.integration.aefi.service;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -39,18 +41,21 @@ import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.hisp.dhis.integration.aefi.config.properties.MailProperties;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MailService
@@ -67,15 +72,14 @@ public class MailService
 
     @Scheduled( cron = "${aefi-to-e2b.mail.schedule}" )
     void sendMail()
-        throws MessagingException
     {
-        if ( !mailProperties.isActive() )
+        if ( !mailProperties.isActive() || !hasText( mailProperties.getTo() ) || !hasText( mailProperties.getFrom() ) )
         {
             return;
         }
 
         // TODO fetch lastUpdated from file system
-        LocalDate lastUpdated = LocalDate.of( 2022, Month.APRIL, 1 );
+        LocalDate lastUpdated = getLastUpdated();
 
         TrackerSearchParams params = TrackerSearchParams.of( List.of(), lastUpdated );
         TrackedEntities trackedEntities = trackerService.search( params );
@@ -85,21 +89,46 @@ public class MailService
             return;
         }
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper( message, true );
-        messageHelper.setTo( mailProperties.getTo() );
-        messageHelper.setFrom( mailProperties.getFrom() );
+        try
+        {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper( message, true );
+            messageHelper.setTo( mailProperties.getTo() );
+            messageHelper.setFrom( mailProperties.getFrom() );
 
-        messageHelper.setSubject( "Latest AEFI updates." );
-        messageHelper.setText(
-            "Got " + trackedEntities.getTrackedEntities().size() + " new AEFI cases since " + lastUpdated + "." );
+            messageHelper.setSubject( "Latest AEFI updates." );
+            messageHelper.setText(
+                "Got " + trackedEntities.getTrackedEntities().size() + " new AEFI cases since " + lastUpdated + "." );
 
-        String xmlAttachment = getAsXml( aefiService.getFromTrackedEntities( trackedEntities ) );
-        messageHelper.addAttachment( "aefi-cases.xml",
-            new ByteArrayResource( xmlAttachment.getBytes( StandardCharsets.UTF_8 ) ),
-            MediaType.APPLICATION_XML_VALUE );
+            String xmlAttachment = getAsXml( aefiService.getFromTrackedEntities( trackedEntities ) );
+            messageHelper.addAttachment( "aefi-cases.xml",
+                new ByteArrayResource( xmlAttachment.getBytes( StandardCharsets.UTF_8 ) ),
+                MediaType.APPLICATION_XML_VALUE );
 
-        mailSender.send( message );
+            mailSender.send( message );
+            setLastUpdated( lastUpdated );
+
+            log.info( "Mail with new cases successfully sent to '" + mailProperties.getTo() + "'." );
+        }
+        catch ( MessagingException ex )
+        {
+            log.error( "Message creation error: " + ex.getMessage() );
+        }
+        catch ( MailException ex )
+        {
+            log.error( "Mail sending error: " + ex.getMessage() );
+        }
+    }
+
+    private LocalDate getLastUpdated()
+    {
+        // TODO get lastUpdated from file system
+        return LocalDate.of( 2022, Month.APRIL, 1 );
+    }
+
+    private void setLastUpdated( LocalDate lastUpdated )
+    {
+        // TODO set last updated
     }
 
     private String getAsXml( Ichicsr ichicsr )
