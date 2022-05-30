@@ -29,11 +29,13 @@ package org.hisp.dhis.integration.aefi.service;
 
 import static org.springframework.util.StringUtils.hasText;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
+import java.util.Properties;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -41,8 +43,10 @@ import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import org.hisp.dhis.integration.aefi.Main;
 import org.hisp.dhis.integration.aefi.config.properties.MailProperties;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
@@ -106,7 +110,7 @@ public class MailService
                 MediaType.APPLICATION_XML_VALUE );
 
             mailSender.send( message );
-            setLastUpdated( lastUpdated );
+            setLastUpdated( LocalDate.now() );
 
             log.info( "Mail with new cases successfully sent to '" + mailProperties.getTo() + "'." );
         }
@@ -120,15 +124,21 @@ public class MailService
         }
     }
 
+    @SneakyThrows
     private LocalDate getLastUpdated()
     {
-        // TODO get lastUpdated from file system
-        return LocalDate.of( 2022, Month.APRIL, 1 );
+        Properties properties = new Properties();
+        properties.load( new FileInputStream( Main.RUNTIME_FILE ) );
+        return LocalDate.parse( properties.get( Main.PROPERTY_LAST_UPDATED ).toString() );
     }
 
+    @SneakyThrows
     private void setLastUpdated( LocalDate lastUpdated )
     {
-        // TODO set last updated
+        Properties properties = new Properties();
+        properties.load( new FileInputStream( Main.RUNTIME_FILE ) );
+        properties.put( Main.PROPERTY_LAST_UPDATED, lastUpdated.toString() );
+        properties.store( new FileOutputStream( Main.RUNTIME_FILE ), null );
     }
 
     private String getAsXml( Ichicsr ichicsr )
