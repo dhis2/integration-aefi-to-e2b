@@ -5,6 +5,16 @@ spring:
   cache:
     caffeine:
       spec: initialCapacity=200,expireAfterWrite=10m
+
+    # GMAIL
+    #host: smtp.gmail.com
+    #port: 587
+    #username: test
+    #password: test
+
+#spring.mail.properties.mail.smtp.auth=true
+#spring.mail.properties.mail.smtp.starttls.enable=true
+
 aefi-to-e2b:
   api_endpoint: /api/aefi-to-e2b
   anonymous: true

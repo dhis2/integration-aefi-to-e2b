@@ -25,27 +25,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.integration.aefi.config.properties;
+package org.hisp.dhis.integration.aefi.routes;
 
-import lombok.Data;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
-@Data
 @Component
-@Validated
-@ConfigurationProperties( prefix = "aefi-to-e2b" )
-public class AefiProperties
+public class CamelEmailRoute extends RouteBuilder
 {
-    private String apiEndpoint;
-
-    private boolean anonymous;
-
-    private MailProperties email = new MailProperties();
-
-    private Dhis2Properties dhis2 = new Dhis2Properties();
-
-    private E2bProperties e2b = new E2bProperties();
+    @Override
+    public void configure()
+        throws Exception
+    {
+        // TODO will be implemented later based on MailService
+    }
 }

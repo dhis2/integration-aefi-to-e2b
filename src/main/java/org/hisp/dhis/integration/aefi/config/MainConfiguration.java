@@ -27,6 +27,10 @@
  */
 package org.hisp.dhis.integration.aefi.config;
 
+import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
+import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
+
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,13 +43,19 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableCaching
+@EnableScheduling
 @EnableConfigurationProperties
 public class MainConfiguration
 {
@@ -77,8 +87,8 @@ public class MainConfiguration
         properties.put( Marshaller.JAXB_FORMATTED_OUTPUT, true );
         properties.put( Marshaller.JAXB_FRAGMENT, true );
         properties.put( "com.sun.xml.bind.xmlHeaders",
-            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"+
-            "\n<!DOCTYPE ichicsr SYSTEM \"http://eudravigilance.ema.europa.eu/dtd/icsr21xml.dtd\">" );
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
+                "\n<!DOCTYPE ichicsr SYSTEM \"http://eudravigilance.ema.europa.eu/dtd/icsr21xml.dtd\">" );
 
         marshaller.setMarshallerProperties( properties );
 
@@ -92,8 +102,39 @@ public class MainConfiguration
         return new RestTemplateBuilder().defaultMessageConverters()
             .defaultHeader( "Content-Type", MediaType.APPLICATION_JSON_VALUE )
             .defaultHeader( "Accept", MediaType.APPLICATION_JSON_VALUE )
+            .errorHandler( new RestTemplateResponseErrorHandler() )
             .basicAuthentication( dhis2Properties.getUsername(),
                 dhis2Properties.getPassword(), StandardCharsets.UTF_8 )
             .build();
+    }
+}
+
+class RestTemplateResponseErrorHandler implements ResponseErrorHandler
+{
+    @Override
+    public boolean hasError( ClientHttpResponse httpResponse )
+        throws IOException
+    {
+        return (httpResponse.getStatusCode().series() == CLIENT_ERROR
+            || httpResponse.getStatusCode().series() == SERVER_ERROR);
+    }
+
+    @Override
+    public void handleError( ClientHttpResponse httpResponse )
+        throws IOException
+    {
+        if ( httpResponse.getStatusCode()
+            .series() == HttpStatus.Series.SERVER_ERROR )
+        {
+            throw new HttpClientErrorException( HttpStatus.BAD_GATEWAY );
+        }
+        else if ( httpResponse.getStatusCode()
+            .series() == HttpStatus.Series.CLIENT_ERROR )
+        {
+            if ( httpResponse.getStatusCode() == HttpStatus.NOT_FOUND )
+            {
+                throw new HttpClientErrorException( HttpStatus.NOT_FOUND );
+            }
+        }
     }
 }

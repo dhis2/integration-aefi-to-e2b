@@ -39,6 +39,7 @@ import org.hisp.dhis.integration.aefi.service.AefiService;
 import org.hisp.dhis.integration.aefi.service.TrackerSearchParams;
 import org.hisp.dhis.integration.aefi.service.TrackerService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequiredArgsConstructor
@@ -60,6 +62,12 @@ public class AefiController
     public ResponseEntity<Ichicsr> getAefiCase( @PathVariable String uid )
     {
         TrackedEntity trackedEntity = trackerService.getById( uid );
+
+        if ( trackedEntity == null )
+        {
+            throw new HttpClientErrorException( HttpStatus.NOT_FOUND );
+        }
+
         Ichicsr ichicsr = aefiService.getFromTrackedEntity( trackedEntity );
 
         return ResponseEntity.ok( ichicsr );

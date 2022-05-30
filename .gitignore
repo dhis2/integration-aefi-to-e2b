@@ -9,4 +9,4 @@ target/
 .vscode
 /application.properties
 /application.yml
-
+/db.properties

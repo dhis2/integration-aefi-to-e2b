@@ -27,14 +27,41 @@
  */
 package org.hisp.dhis.integration.aefi;
 
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.Properties;
+
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Main
+public class Main implements CommandLineRunner
 {
+    // File for keeping local state up to date
+    public final static String PROPERTY_FILENAME = "db.properties";
+
+    // Key for keeping email last updated
+    public final static String PROPERTY_MAIL_LAST_UPDATED = "mail.last-updated";
+
     public static void main( String[] args )
     {
         SpringApplication.run( Main.class, args );
+    }
+
+    @Override
+    public void run( String... args )
+        throws Exception
+    {
+        Path path = Path.of( PROPERTY_FILENAME );
+
+        if ( !Files.exists( path ) )
+        {
+            Properties properties = new Properties();
+            properties.put( PROPERTY_MAIL_LAST_UPDATED, LocalDate.of( 2022, 1, 1 ).toString() );
+            properties.store( new FileOutputStream( PROPERTY_FILENAME ), null );
+        }
     }
 }
