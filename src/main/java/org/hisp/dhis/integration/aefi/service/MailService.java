@@ -82,7 +82,6 @@ public class MailService
             return;
         }
 
-        // TODO fetch lastUpdated from file system
         LocalDate lastUpdated = getLastUpdated();
 
         TrackerSearchParams params = TrackerSearchParams.of( List.of(), lastUpdated );
