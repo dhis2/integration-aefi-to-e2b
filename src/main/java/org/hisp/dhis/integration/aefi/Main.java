@@ -41,7 +41,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Main implements CommandLineRunner
 {
     // File for keeping local state up to date
-    public final static String PROPERTY_FILENAME = "db.properties";
+    public final static String PROPERTY_FILENAME = "state.properties";
 
     // Key for keeping email last updated
     public final static String PROPERTY_MAIL_LAST_UPDATED = "mail.last-updated";
