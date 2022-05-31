@@ -1,6 +1,6 @@
 # AEFI to E2B DHIS2 Gateway
 
-![Build Status](https://github.com/smooks/smooks/workflows/CI/badge.svg)
+![Build Status](https://github.com/dhis2/integration-aefi-to-e2b/workflows/CI/badge.svg)
 
 **Requirements**: JDK 11, Maven 3
 
