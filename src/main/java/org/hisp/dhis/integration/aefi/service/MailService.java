@@ -77,7 +77,7 @@ public class MailService
     @Scheduled( cron = "${aefi-to-e2b.mail.schedule}" )
     void sendMail()
     {
-        if ( !mailProperties.isActive() || !hasText( mailProperties.getTo() ) || !hasText( mailProperties.getFrom() ) )
+        if ( !mailProperties.isEnabled() || !hasText( mailProperties.getTo() ) || !hasText( mailProperties.getFrom() ) )
         {
             return;
         }

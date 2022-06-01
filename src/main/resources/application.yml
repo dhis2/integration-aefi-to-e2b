@@ -16,8 +16,15 @@ spring:
 #spring.mail.properties.mail.smtp.starttls.enable=true
 
 aefi-to-e2b:
-  api_endpoint: /api/aefi-to-e2b
   anonymous: true
+  api:
+    enabled: true
+    endpoint: /api/aefi-to-e2b
+  mail:
+    enabled: false
+    to: test@example.com
+    from: noreply.test@example.org
+    schedule: "0 * * * * *"
   dhis2:
     mapping:
       program: EZkN8vYZwjR

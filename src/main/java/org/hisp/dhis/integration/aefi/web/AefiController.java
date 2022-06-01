@@ -38,6 +38,7 @@ import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
 import org.hisp.dhis.integration.aefi.service.AefiService;
 import org.hisp.dhis.integration.aefi.service.TrackerSearchParams;
 import org.hisp.dhis.integration.aefi.service.TrackerService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,7 +52,8 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping( "${aefi-to-e2b.api_endpoint}" )
+@ConditionalOnProperty( prefix = "aefi-to-e2b.api", name = "enabled" )
+@RequestMapping( "${aefi-to-e2b.api.endpoint}" )
 public class AefiController
 {
     private final TrackerService trackerService;

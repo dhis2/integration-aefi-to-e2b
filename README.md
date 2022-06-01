@@ -66,7 +66,7 @@ After that you need to enable the internal scheduler to send this scheduled emai
 ```yaml
 aefi-to-e2b:
   mail:
-    active: true
+    enabled: true
     to: morten@dhis2.org
     from: noreply@dhis2.org
     schedule: "0 0 * * * *"

@@ -43,7 +43,7 @@ import org.springframework.validation.annotation.Validated;
 public class MailProperties
 {
     @NotNull
-    private boolean active;
+    private boolean enabled;
 
     @Email
     private String to;
