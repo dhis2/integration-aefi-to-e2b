@@ -27,16 +27,28 @@
  */
 package org.hisp.dhis.integration.aefi.routes;
 
+import lombok.RequiredArgsConstructor;
+
 import org.apache.camel.builder.RouteBuilder;
+import org.hisp.dhis.integration.aefi.config.properties.MailProperties;
+import org.hisp.dhis.integration.aefi.service.MailService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@ConditionalOnProperty( prefix = "aefi-to-e2b.mail", name = "enabled" )
 public class CamelEmailRoute extends RouteBuilder
 {
+    private final MailProperties mailProperties;
+
+    private final MailService mailService;
+
     @Override
     public void configure()
         throws Exception
     {
-        // TODO will be implemented later based on MailService
+        from( "cron:mail?schedule=" + mailProperties.getSchedule() )
+            .process( x -> mailService.sendMail() );
     }
 }

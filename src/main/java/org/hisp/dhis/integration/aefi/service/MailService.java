@@ -56,7 +56,6 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -74,8 +73,7 @@ public class MailService
 
     private final AefiService aefiService;
 
-    @Scheduled( cron = "${aefi-to-e2b.mail.schedule}" )
-    void sendMail()
+    public void sendMail()
     {
         if ( !mailProperties.isEnabled() || !hasText( mailProperties.getTo() ) || !hasText( mailProperties.getFrom() ) )
         {
