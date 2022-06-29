@@ -786,11 +786,11 @@ public final class IchicsrUtils
         {
             if ( hasText( reactionStartTime ) )
             {
-                reactionStartDate = "T" + reactionStartTime;
+                reactionStartDate += "T" + reactionStartTime;
             }
             else if ( !reactionStartDate.contains( "T" ) )
             {
-                reactionStartDate = reactionStartDate + "T00:00:00";
+                reactionStartDate += "T00:00:00";
             }
 
             LocalDateTime dateTime = LocalDateTime.parse( reactionStartDate );
