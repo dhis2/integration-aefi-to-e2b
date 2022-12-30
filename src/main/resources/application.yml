@@ -5,6 +5,11 @@ spring:
   cache:
     caffeine:
       spec: initialCapacity=200,expireAfterWrite=10m
+  mail:
+    host: localhost
+    port: 25
+    username: test
+    password: test
 
     # GMAIL
     #host: smtp.gmail.com
