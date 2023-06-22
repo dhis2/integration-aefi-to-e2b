@@ -27,19 +27,25 @@
  */
 package org.hisp.dhis.integration.aefi.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import org.hisp.dhis.integration.aefi.common.IchicsrUtils;
 import org.hisp.dhis.integration.aefi.config.properties.AefiProperties;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Drug;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsr;
 import org.hisp.dhis.integration.aefi.domain.icsr21.Ichicsrmessageheader;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Reaction;
+import org.hisp.dhis.integration.aefi.domain.icsr21.Safetyreport;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntities;
 import org.hisp.dhis.integration.aefi.domain.tracker.TrackedEntity;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 @RequiredArgsConstructor
 public class AefiService
 {
@@ -65,8 +71,21 @@ public class AefiService
 
         ichicsr.setIchicsrmessageheader( ichicsrmessageheader );
 
-        trackedEntities.getTrackedEntities().forEach( te -> ichicsr.getSafetyreport().add( IchicsrUtils
-            .createSafetyreport( aefiProperties, te, organisationUnitService::getOrganisationUnit ) ) );
+        trackedEntities.getTrackedEntities().forEach( te -> {
+            Safetyreport safetyreport = IchicsrUtils
+                .createSafetyreport( aefiProperties, te, organisationUnitService::getOrganisationUnit );
+
+            List<Drug> drugs = safetyreport.getPatient().getDrug();
+            List<Reaction> reactions = safetyreport.getPatient().getReaction();
+
+            if ( drugs == null || reactions == null || drugs.isEmpty() || reactions.isEmpty() )
+            {
+                log.warn( "Skipping safetyreport: " + safetyreport );
+                return;
+            }
+
+            ichicsr.getSafetyreport().add( safetyreport );
+        } );
 
         return ichicsr;
     }
