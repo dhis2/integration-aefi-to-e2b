@@ -452,7 +452,7 @@ public final class IchicsrUtils
 
         if ( hasText( vaccine_expiry ) )
         {
-            druginfo.add( ", Expiry: " + vaccine_expiry );
+            druginfo.add( "Expiry: " + vaccine_expiry );
         }
 
         if ( !druginfo.isEmpty() )
