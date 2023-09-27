@@ -106,7 +106,7 @@ public class TrackerService
                 .queryParam( "fields", "*" )
                 .queryParam( "ouMode", "ACCESSIBLE" )
                 .queryParam( "skipPaging", "true" )
-                .queryParam( "lastUpdatedStartDate", params.getLastUpdated() )
+                .queryParam( "programStartDate", params.getLastUpdated() )
                 .build()
                 .encode();
 
