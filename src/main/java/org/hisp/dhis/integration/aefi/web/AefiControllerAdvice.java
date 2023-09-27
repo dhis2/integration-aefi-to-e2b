@@ -34,11 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -83,29 +78,35 @@ class WebMessage
 
     private String message;
 
-  public WebMessage() {
-  }
+    public WebMessage()
+    {
+    }
 
-  public WebMessage(int httpStatus, String message) {
-    this.httpStatus = httpStatus;
-    this.message = message;
-  }
+    public WebMessage( int httpStatus, String message )
+    {
+        this.httpStatus = httpStatus;
+        this.message = message;
+    }
 
-  @XmlElement
-  public int getHttpStatus() {
+    @XmlElement
+    public int getHttpStatus()
+    {
         return httpStatus;
     }
 
-    public void setHttpStatus(int httpStatus) {
+    public void setHttpStatus( int httpStatus )
+    {
         this.httpStatus = httpStatus;
     }
 
-  @XmlElement
-    public String getMessage() {
+    @XmlElement
+    public String getMessage()
+    {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage( String message )
+    {
         this.message = message;
     }
 }

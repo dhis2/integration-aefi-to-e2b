@@ -66,6 +66,8 @@ public class TrackerService
             .build()
             .encode();
 
+        System.err.println(uriComponents.toUriString());
+
         ResponseEntity<TrackedEntity> response = restTemplate.getForEntity( uriComponents.toUri(),
             TrackedEntity.class );
 
