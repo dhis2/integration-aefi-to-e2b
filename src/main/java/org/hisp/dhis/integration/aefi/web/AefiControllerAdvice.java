@@ -79,10 +79,8 @@ public class AefiControllerAdvice
 @XmlRootElement( name = "webMessage" )
 class WebMessage
 {
-    @XmlElement
     private int httpStatus;
 
-    @XmlElement
     private String message;
 
   public WebMessage() {
@@ -93,6 +91,7 @@ class WebMessage
     this.message = message;
   }
 
+  @XmlElement
   public int getHttpStatus() {
         return httpStatus;
     }
@@ -101,6 +100,7 @@ class WebMessage
         this.httpStatus = httpStatus;
     }
 
+  @XmlElement
     public String getMessage() {
         return message;
     }
