@@ -34,7 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -75,13 +77,14 @@ public class AefiControllerAdvice
 }
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @XmlRootElement( name = "webMessage" )
 class WebMessage
 {
     @XmlElement
-    private final int httpStatus;
+    private int httpStatus;
 
     @XmlElement
-    private final String message;
+    private String message;
 }
