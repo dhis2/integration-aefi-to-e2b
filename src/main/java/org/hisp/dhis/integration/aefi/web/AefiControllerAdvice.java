@@ -76,9 +76,6 @@ public class AefiControllerAdvice
     }
 }
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @XmlRootElement( name = "webMessage" )
 class WebMessage
 {
@@ -87,4 +84,28 @@ class WebMessage
 
     @XmlElement
     private String message;
+
+  public WebMessage() {
+  }
+
+  public WebMessage(int httpStatus, String message) {
+    this.httpStatus = httpStatus;
+    this.message = message;
+  }
+
+  public int getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(int httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }
