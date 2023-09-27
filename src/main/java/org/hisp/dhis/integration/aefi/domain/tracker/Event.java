@@ -27,7 +27,6 @@
  */
 package org.hisp.dhis.integration.aefi.domain.tracker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -43,5 +42,5 @@ public class Event
 
     private String status;
 
-    private List<DataValue> dataValues = new ArrayList<>();
+    private List<DataValue> dataValues;
 }

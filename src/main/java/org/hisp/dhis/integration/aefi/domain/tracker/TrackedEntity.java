@@ -28,7 +28,6 @@
 package org.hisp.dhis.integration.aefi.domain.tracker;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -47,7 +46,7 @@ public class TrackedEntity
 
     private LocalDateTime lastUpdated;
 
-    private List<TrackedEntityAttribute> attributes = new ArrayList<>();
+    private List<TrackedEntityAttribute> attributes;
 
-    private List<Enrollment> enrollments = new ArrayList<>();
+    private List<Enrollment> enrollments;
 }
