@@ -58,6 +58,8 @@ public class AefiService
         TrackedEntities trackedEntities = new TrackedEntities();
         trackedEntities.getTrackedEntities().add( trackedEntity );
 
+        System.err.println("1");
+
         return getFromTrackedEntities( trackedEntities );
     }
 
@@ -68,6 +70,8 @@ public class AefiService
         Ichicsrmessageheader ichicsrmessageheader = IchicsrUtils.createIchicsrmessageheader(
             UUID.randomUUID().toString(), aefiProperties.getE2b().getSenderId(),
             aefiProperties.getE2b().getReceiverId() );
+
+        System.err.println("2");
 
         ichicsr.setIchicsrmessageheader( ichicsrmessageheader );
 

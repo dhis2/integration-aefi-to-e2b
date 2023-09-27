@@ -72,6 +72,8 @@ public class AefiController
 
         Ichicsr ichicsr = aefiService.getFromTrackedEntity( trackedEntity );
 
+        System.err.println("ichicsr: " + ichicsr);
+
         return ResponseEntity.ok( ichicsr );
     }
 

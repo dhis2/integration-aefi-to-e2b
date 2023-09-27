@@ -69,9 +69,6 @@ public class TrackerService
         ResponseEntity<TrackedEntity> response = restTemplate.getForEntity( uriComponents.toUri(),
             TrackedEntity.class );
 
-        System.err.println(response.getStatusCode());
-        System.err.println(response.getStatusCodeValue());
-
         return response.getBody();
     }
 
