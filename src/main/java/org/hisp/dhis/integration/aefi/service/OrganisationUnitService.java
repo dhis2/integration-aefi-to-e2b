@@ -28,42 +28,48 @@
 package org.hisp.dhis.integration.aefi.service;
 
 import java.net.URI;
-
 import lombok.RequiredArgsConstructor;
-
 import org.hisp.dhis.integration.aefi.config.properties.Dhis2Properties;
 import org.hisp.dhis.integration.aefi.domain.OrganisationUnit;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig( cacheNames = { "orgUnit" } )
-public class OrganisationUnitService
-{
-    private final Dhis2Properties dhis2Properties;
+@CacheConfig(cacheNames = {"orgUnit"})
+public class OrganisationUnitService {
 
-    private final RestTemplate restTemplate;
+  private final Dhis2Properties dhis2Properties;
 
-    @Cacheable( "orgUnit" )
-    public OrganisationUnit getOrganisationUnit( String id )
-    {
-        UriComponents uriComponents = UriComponentsBuilder.newInstance()
-            .uri( URI.create( dhis2Properties.getBaseUrl() ) )
-            .path( "/api/organisationUnits/" )
-            .path( id )
-            .queryParam( "fields", "id,displayName~rename(name)" )
-            .build()
-            .encode();
+  private final RestTemplate restTemplate;
 
-        ResponseEntity<OrganisationUnit> response = restTemplate.getForEntity( uriComponents.toUri(),
-            OrganisationUnit.class );
+  @Cacheable("orgUnit")
+  public OrganisationUnit getOrganisationUnit(String id) {
+    UriComponents uriComponents = UriComponentsBuilder.newInstance()
+        .uri(URI.create(dhis2Properties.getBaseUrl()))
+        .path("/api/organisationUnits/")
+        .path(id)
+        .queryParam("fields", "id,displayName~rename(name)")
+        .build()
+        .encode();
 
-        return response.getBody();
+    try {
+      ResponseEntity<OrganisationUnit> response = restTemplate.getForEntity(uriComponents.toUri(),
+          OrganisationUnit.class);
+
+      return response.getBody();
+    } catch (HttpClientErrorException ignored) {
+      OrganisationUnit organisationUnit = new OrganisationUnit();
+      organisationUnit.setId(id);
+      organisationUnit.setName(id);
+
+      return organisationUnit;
     }
+  }
 }
